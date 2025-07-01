@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pioneer Pressure Washing and Landscaping</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="container">
+  <h1>Pioneer</h1>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="estimate.html">Free Estimate</a>
+    <a href="business/portal.html">Business Login</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h2>Professional Pressure Washing & Landscaping</h2>
+    <p>Driveways, Roofs, Gutters, Lawns & More</p>
+    <a href="estimate.html" class="btn-primary">Get a Free Estimate</a>
+  </div>
+</section>
+
+<section id="gallery" class="alt-section">
+  <div class="container">
+    <h2>Before & After Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="img/before-driveway1.jpg" alt="Before Driveway" />
+        <img src="img/after-driveway1.jpg" alt="After Driveway" />
+        <p><strong>Driveway Cleaning</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="service-grid">
+      <div class="service-item">
+        <img src="img/driveway.jpg" />
+        <h3>Driveway Cleaning</h3>
+      </div>
+      <div class="service-item">
+        <img src="img/roof.jpg" />
+        <h3>Roof Cleaning</h3>
+      </div>
+      <div class="service-item">
+        <img src="img/gutter.jpg" />
+        <h3>Gutter Cleaning</h3>
+      </div>
+      <div class="service-item">
+        <img src="img/lawn.jpg" />
+        <h3>Lawn Mowing</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="alt-section">
+  <div class="container">
+    <h2>About Us</h2>
+    <p>
+      Locally owned. Detail-driven. We make homes shine from the curb up
+      with pressure washing and professional landscaping.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container contact">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <input
+        name="name"
+        type="text"
+        placeholder="Your Name"
+        required
+      />
+      <input
+        name="email"
+        type="email"
+        placeholder="Your Email"
+        required
+      />
+      <textarea
+        name="message"
+        placeholder="Message"
+        rows="6"
+        required
+      ></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <div id="formResponse" style="margin-top:1rem;"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
+</footer>
+
+<script>
+  const contactForm = document.getElementById("contactForm");
+  const formResponse = document.getElementById("formResponse");
+
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formResponse.textContent = "Sending...";
+
+    const formData = {
+      name: contactForm.name.value,
+      email: contactForm.email.value,
+      message: contactForm.message.value,
+    };
+
+    try {
+      const response = await fetch("https://your-api-domain.com/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        formResponse.textContent = "Message sent! We'll be in touch soon.";
+        contactForm.reset();
+      } else {
+        formResponse.textContent =
+          "Failed to send message. Please try again later.";
+      }
+    } catch (error) {
+      formResponse.textContent =
+        "An error occurred. Please try again later.";
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html>
