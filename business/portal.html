@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pioneer Business Portal</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Business Portal Login</h2>
+  <form onsubmit="event.preventDefault(); document.getElementById('portal').style.display='block';">
+    <input type="text" placeholder="Username" required />
+    <input type="password" placeholder="Password" required />
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+
+  <div id="portal" style="display:none; margin-top: 40px;">
+    <h3>Create Invoice</h3>
+    <textarea id="invoice" rows="10" cols="60" placeholder="Enter invoice details..."></textarea><br>
+    <button class="btn-primary" onclick="downloadInvoice()">Download Invoice</button>
+  </div>
+</div>
+
+<script>
+function downloadInvoice() {
+  const text = document.getElementById('invoice').value;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'invoice.txt';
+  link.click();
+}
+</script>
+
+</body>
+</html>
