@@ -1,37 +1,40 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('contact-form');
-  const responseDiv = document.getElementById('formResponse');
 
-  form.addEventListener('submit', async (e) => {
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    const data = {
-      name: formData.get('name').trim(),
-      email: formData.get('email').trim(),
-      message: formData.get('message').trim(),
-    };
+    const name = document.getElementById('name')?.value?.trim();
+    const email = document.getElementById('email')?.value?.trim();
+    const message = document.getElementById('message')?.value?.trim();
+
+    if (!name || !email || !message) {
+      alert('Please fill in all fields.');
+      return;
+    }
 
     try {
-      const response = await fetch('https://pioneer-pressure-washing.onrender.com/contact', {
+      const response = await fetch('https://pioneer-pressure-washing.onrender.com/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ name, email, message })
       });
 
       const result = await response.json();
 
-      if (result.message) {
-        responseDiv.textContent = 'Message sent successfully!';
-        responseDiv.style.color = 'green';
+      if (response.ok) {
+        console.log('Submission successful:', result);
+        alert('Thank you! Your message has been sent.');
         form.reset();
       } else {
-        responseDiv.textContent = 'Error sending message. Please try again later.';
-        responseDiv.style.color = 'red';
+        console.error('Submission error:', result);
+        alert('There was an error submitting the form.');
       }
     } catch (err) {
-      responseDiv.textContent = 'Network error. Please try again later.';
-      responseDiv.style.color = 'red';
+      console.error('Network error:', err);
+      alert('Unable to connect to the server.');
     }
   });
 });
