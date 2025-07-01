@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Contact Submissions</h1>
+  <table id="contacts-table">
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch('https://pioneer-pressure-washing.onrender.com/api/admin/contacts')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#contacts-table tbody');
+        data.forEach(contact => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${contact.id}</td>
+            <td>${contact.name}</td>
+            <td>${contact.email}</td>
+            <td>${contact.message}</td>
+            <td>${new Date(contact.submitted_at).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to load contacts:', err);
+        alert('Failed to load contacts.');
+      });
+  </script>
+</body>
+</html>
