@@ -25,15 +25,15 @@ document.addEventListener('DOMContentLoaded', function () {
       const result = await response.json();
 
       if (response.ok) {
-        console.log('Submission successful:', result);
+        console.log('✅ Submission successful:', result);
         alert('Thank you! Your message has been sent.');
         form.reset();
       } else {
-        console.error('Submission error:', result);
-        alert('There was an error submitting the form.');
+        console.error('❌ Submission error:', response.status, result);
+        alert(`Server Error (${response.status}): ${result.error || 'Unknown error'}`);
       }
     } catch (err) {
-      console.error('Network error:', err);
+      console.error('❌ Network error:', err);
       alert('Unable to connect to the server.');
     }
   });
