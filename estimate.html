@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Free Estimate</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="container">
+  <h1>Free Estimate</h1>
+  <form id="estimateForm">
+    <label><input type="checkbox" id="driveway"> Driveway Cleaning</label>
+    <input type="number" id="drivewaySqft" placeholder="Square Footage (optional)">
+
+    <label><input type="checkbox" id="roof"> Roof Cleaning</label>
+    <input type="number" id="roofSqft" placeholder="Square Footage (optional)">
+
+    <label><input type="checkbox" id="gutter"> Gutter Cleaning ($85 flat)</label>
+
+    <label><input type="checkbox" id="lawn"> Lawn Mowing</label>
+    <input type="number" id="lawnSqft" placeholder="Square Footage (optional)">
+
+    <br><br>
+    <button type="button" class="btn-primary" onclick="calculateEstimate()">Get Estimate</button>
+  </form>
+
+  <div class="result" id="estimateResult"></div>
+</div>
+
+<script src="js/estimate.js"></script>
+</body>
+</html>
