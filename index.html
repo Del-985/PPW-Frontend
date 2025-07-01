@@ -114,17 +114,15 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   const email = document.getElementById('email').value.trim();
   const message = document.getElementById('message').value.trim();
 
-  const response = await fetch('https://pioneer-pressure-washing.onrender.com', {
+  const response = await fetch('https://pioneer-pressure-washing.onrender.com/contact', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ name, email, message })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, message }),
   });
 
   const result = await response.json();
 
-  if (result.success) {
+  if (result.message) {
     alert('Message sent successfully!');
     document.getElementById('contact-form').reset();
   } else {
@@ -132,6 +130,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   }
 });
 </script>
+
 
 
 </body>
