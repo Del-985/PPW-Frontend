@@ -1,26 +1,33 @@
-document.getElementById('business-login-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const email = this.email.value.trim();
-  const password = this.password.value.trim();
-  const responseBox = document.getElementById('loginResponse');
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form');
 
-  try {
-    const response = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    const data = await response.json();
+    const username = document.querySelector('input[name="username"]').value.trim();
+    const password = document.querySelector('input[name="password"]').value;
 
-    if (response.ok) {
-      responseBox.textContent = 'Login successful!';
-      document.getElementById('portal').style.display = 'block';
-    } else {
-      responseBox.textContent = data.error || 'Login failed.';
+    try {
+      const response = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('Login successful:', result);
+        // Redirect to dashboard
+        window.location.href = 'business/dashboard.html';
+      } else {
+        alert(result.error || 'Login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An unexpected error occurred.');
     }
-  } catch (err) {
-    console.error('Login error:', err);
-    responseBox.textContent = 'Server error.';
-  }
+  });
 });
