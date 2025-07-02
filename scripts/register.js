@@ -6,21 +6,28 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
   const password = e.target.password.value.trim();
   const responseBox = document.getElementById('registerResponse');
 
-  const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ business_name, email, password })
-  });
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ business_name, email, password })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (res.ok) {
-    responseBox.textContent = 'Registration successful. Redirecting to login...';
-setTimeout(() => window.location.href = '/portal.html', 2000);
-    responseBox.style.color = 'green';
-    e.target.reset();
-  } else {
-    responseBox.textContent = data.error || 'Registration failed.';
+    if (res.ok) {
+      responseBox.textContent = 'Registration successful. Redirecting to dashboard...';
+      responseBox.style.color = 'green';
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 2000);
+    } else {
+      responseBox.textContent = data.error || 'Registration failed.';
+      responseBox.style.color = 'red';
+    }
+  } catch (err) {
+    console.error('Registration error:', err);
+    responseBox.textContent = 'An unexpected error occurred.';
     responseBox.style.color = 'red';
   }
 });
