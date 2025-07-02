@@ -15,7 +15,8 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
   const data = await res.json();
 
   if (res.ok) {
-    responseBox.textContent = 'Registration successful. Please log in.';
+    responseBox.textContent = 'Registration successful. Redirecting to login...';
+setTimeout(() => window.location.href = '/portal.html', 2000);
     responseBox.style.color = 'green';
     e.target.reset();
   } else {
