@@ -7,35 +7,86 @@
 </head>
 <body>
 
-  <header class="container">
-    <h1>Pioneer</h1>
-    <nav>
-      <a href="../index.html#services">Services</a>
-      <a href="../index.html#gallery">Gallery</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#contact">Contact</a>
-      <a href="../estimate.html">Free Estimate</a>
-      <a href="../portal.html">Business Portal</a>
-    </nav>
-  </header>
+<header class="container">
+  <h1>Pioneer</h1>
+  <nav>
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#gallery">Gallery</a>
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../estimate.html">Free Estimate</a>
+    <a href="../portal.html">Business Portal</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h2>Business Dashboard</h2>
-    <p>Welcome! You’ve successfully logged in.</p>
+<main class="container">
+  <h2>Business Dashboard</h2>
+  <p>Welcome! You’ve successfully logged in.</p>
 
-    <section style="margin-top: 2rem;">
-      <h3>Tools</h3>
-      <ul>
-        <li><a href="#">View Invoices (coming soon)</a></li>
-        <li><a href="#">Manage Submissions (coming soon)</a></li>
-        <li><a href="#">Send Estimates (coming soon)</a></li>
-      </ul>
-    </section>
-  </main>
+  <section style="margin-top: 2rem;">
+    <h3>Tools</h3>
+    <ul>
+      <li><a href="#">View Invoices (coming soon)</a></li>
+      <li><a href="#">Manage Submissions (coming soon)</a></li>
+      <li><a href="#">Send Estimates (coming soon)</a></li>
+    </ul>
+  </section>
 
-  <footer class="footer">
-    <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
-  </footer>
+  <section style="margin-top: 3rem;">
+    <h3>Recent Contact Submissions</h3>
+    <div id="contacts">
+      <p>Loading contacts...</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
+</footer>
+
+<script>
+  async function loadContacts() {
+    const contactsDiv = document.getElementById('contacts');
+    try {
+      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts');
+      const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        contactsDiv.innerHTML = '<p>No contacts found.</p>';
+        return;
+      }
+
+      if (data.length === 0) {
+        contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
+        return;
+      }
+
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
+        </thead>
+        <tbody>
+          ${data.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${row.email}</td>
+              <td>${row.message}</td>
+              <td>${new Date(row.submitted_at).toLocaleString()}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+      contactsDiv.innerHTML = '';
+      contactsDiv.appendChild(table);
+    } catch (err) {
+      contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
+      console.error(err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadContacts);
+</script>
 
 </body>
 </html>
