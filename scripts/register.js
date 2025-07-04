@@ -25,7 +25,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
       responseBox.textContent = 'Registration successful. Redirecting to dashboard...';
       responseBox.style.color = 'green';
       setTimeout(() => {
-        window.location.href = '../dashboard.html'; // ✅ Ensure correct relative path
+        window.location.href = '../business/dashboard.html'; // ✅ Ensure correct relative path
       }, 2000);
     } else {
       responseBox.textContent = data.error || 'Registration failed.';
