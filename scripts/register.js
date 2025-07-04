@@ -13,18 +13,25 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
       body: JSON.stringify({ business_name, email, password })
     });
 
-    const data = await res.json();
+    let data;
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      data = await res.json();
+    } else {
+      throw new Error('Server did not return JSON');
+    }
 
     if (res.ok) {
       responseBox.textContent = 'Registration successful. Redirecting to dashboard...';
       responseBox.style.color = 'green';
       setTimeout(() => {
-        window.location.href = 'dashboard.html';
+        window.location.href = '../dashboard.html'; // ✅ Ensure correct relative path
       }, 2000);
     } else {
       responseBox.textContent = data.error || 'Registration failed.';
       responseBox.style.color = 'red';
     }
+
   } catch (err) {
     console.error('Registration error:', err);
     responseBox.textContent = 'An unexpected error occurred.';
