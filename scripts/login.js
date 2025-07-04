@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
       responseBox.textContent = 'Login successful. Redirecting to dashboard...';
       responseBox.style.color = 'green';
       setTimeout(() => {
-        window.location.href = 'dashboard.html';
+        window.location.href = '../business/dashboard.html';
       }, 1500);
     } else {
       responseBox.textContent = data.error || 'Invalid email or password.';
