@@ -36,47 +36,51 @@ function setupScheduleForm() {
   }
 }
 
-async function loadContacts() {
-  const contactsDiv = document.getElementById('contacts');
+async function renderCalendar() {
+  const calendar = document.getElementById('calendar');
+  calendar.innerHTML = '';
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const taskMap = {};
+
   try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
       credentials: 'include'
     });
-    const data = await res.json();
+    const tasks = await res.json();
 
-    if (!Array.isArray(data)) {
-      contactsDiv.innerHTML = '<p>No contacts found.</p>';
-      return;
-    }
-
-    if (data.length === 0) {
-      contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
-      return;
-    }
-
-    const table = document.createElement('table');
-    table.innerHTML = `
-      <thead>
-        <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
-      </thead>
-      <tbody>
-        ${data.map(row => `
-          <tr>
-            <td>${row.name}</td>
-            <td>${row.email}</td>
-            <td>${row.message}</td>
-            <td>${new Date(row.submitted_at).toLocaleString()}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    `;
-    contactsDiv.innerHTML = '';
-    contactsDiv.appendChild(table);
+    tasks.forEach(task => {
+      const day = new Date(task.scheduled_date).getDate();
+      if (!taskMap[day]) taskMap[day] = [];
+      taskMap[day].push(task);
+    });
   } catch (err) {
-    contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
-    console.error(err);
+    console.error('Failed to fetch schedule tasks:', err);
+  }
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayBox = document.createElement('div');
+    dayBox.className = 'calendar-day';
+    dayBox.innerHTML = `<span>${i}</span>`;
+
+    if (taskMap[i]) {
+      taskMap[i].forEach(task => {
+        const note = document.createElement('div');
+        note.textContent = task.service_type || 'Task';
+        note.style.fontSize = '12px';
+        note.style.marginTop = '12px';
+        dayBox.appendChild(note);
+      });
+    }
+
+    calendar.appendChild(dayBox);
   }
 }
+
 
 function renderCalendar() {
   const calendar = document.getElementById('calendar');
