@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   setupScheduleForm();
   loadContacts();
-  renderCalendar();
+  await renderCalendar();
 });
 
 function setupScheduleForm() {
@@ -38,6 +38,7 @@ function setupScheduleForm() {
 
 async function renderCalendar() {
   const calendar = document.getElementById('calendar');
+  if (!calendar) return;
   calendar.innerHTML = '';
 
   const now = new Date();
@@ -54,7 +55,8 @@ async function renderCalendar() {
     const tasks = await res.json();
 
     tasks.forEach(task => {
-      const day = new Date(task.scheduled_date).getDate();
+      const taskDate = new Date(task.scheduled_date);
+      const day = taskDate.getDate();
       if (!taskMap[day]) taskMap[day] = [];
       taskMap[day].push(task);
     });
@@ -70,42 +72,12 @@ async function renderCalendar() {
     if (taskMap[i]) {
       taskMap[i].forEach(task => {
         const note = document.createElement('div');
-        note.textContent = task.service_type || 'Task';
+        note.textContent = `${task.service_type} @ ${task.scheduled_time}`;
         note.style.fontSize = '12px';
-        note.style.marginTop = '12px';
+        note.style.marginTop = '4px';
         dayBox.appendChild(note);
       });
     }
-
-    calendar.appendChild(dayBox);
-  }
-}
-
-
-function renderCalendar() {
-  const calendar = document.getElementById('calendar');
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  calendar.innerHTML = '';
-
-  for (let i = 1; i <= daysInMonth; i++) {
-    const dayBox = document.createElement('div');
-    dayBox.className = 'calendar-day';
-    dayBox.innerHTML = `<span>${i}</span>`;
-
-    dayBox.addEventListener('click', () => {
-      const task = prompt(`Enter task for ${month + 1}/${i}/${year}`);
-      if (task) {
-        const note = document.createElement('div');
-        note.textContent = task;
-        note.style.fontSize = '12px';
-        note.style.marginTop = '18px';
-        dayBox.appendChild(note);
-      }
-    });
 
     calendar.appendChild(dayBox);
   }
