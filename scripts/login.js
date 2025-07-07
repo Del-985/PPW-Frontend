@@ -9,7 +9,8 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
+      credentials: 'include' // ← Important for sending/receiving cookies
     });
 
     const data = await res.json();
