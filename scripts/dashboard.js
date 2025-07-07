@@ -36,6 +36,48 @@ function setupScheduleForm() {
   }
 }
 
+async function loadContacts() {
+  const contactsDiv = document.getElementById('contacts');
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
+      credentials: 'include'
+    });
+    const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      contactsDiv.innerHTML = '<p>No contacts found.</p>';
+      return;
+    }
+
+    if (data.length === 0) {
+      contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
+      </thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td>${row.name}</td>
+            <td>${row.email}</td>
+            <td>${row.message}</td>
+            <td>${new Date(row.submitted_at).toLocaleString()}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+    contactsDiv.innerHTML = '';
+    contactsDiv.appendChild(table);
+  } catch (err) {
+    contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
+    console.error(err);
+  }
+}
+
 async function renderCalendar() {
   const calendar = document.getElementById('calendar');
   if (!calendar) return;
