@@ -119,6 +119,17 @@ async function renderCalendar() {
       });
     }
 
+    dayBox.addEventListener('click', () => {
+      const task = prompt(`Enter task for ${month + 1}/${i}/${year}`);
+      if (task) {
+        const note = document.createElement('div');
+        note.textContent = task;
+        note.style.fontSize = '12px';
+        note.style.marginTop = '4px';
+        dayBox.appendChild(note);
+      }
+    });
+
     calendar.appendChild(dayBox);
   }
 }
@@ -137,6 +148,17 @@ function renderCalendarFallback() {
     const dayBox = document.createElement('div');
     dayBox.className = 'calendar-day';
     dayBox.innerHTML = `<span>${i}</span>`;
+
+    dayBox.addEventListener('click', () => {
+      const task = prompt(`Enter task for ${month + 1}/${i}/${year}`);
+      if (task) {
+        const note = document.createElement('div');
+        note.textContent = task;
+        note.style.fontSize = '12px';
+        note.style.marginTop = '4px';
+        dayBox.appendChild(note);
+      }
+    });
 
     calendar.appendChild(dayBox);
   }
