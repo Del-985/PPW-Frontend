@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Admin Dashboard</title>
   <style>
     body { font-family: sans-serif; padding: 20px; }
@@ -9,24 +9,29 @@
     th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
   </style>
 </head>
-  <header class="container">
-  <h1>Pioneer</h1>
-  <nav>
-    <a href="index.html#services">Services</a>
-    <a href="index.html#gallery">Gallery</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="estimate.html">Free Estimate</a>
-    <a href="portal.html">Business Login</a>
-  </nav>
-</header>
-
 <body>
+  <header class="container">
+    <h1>Pioneer</h1>
+    <nav>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#gallery">Gallery</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="estimate.html">Free Estimate</a>
+      <a href="portal.html">Business Login</a>
+    </nav>
+  </header>
+
   <h1>Contact Submissions</h1>
-  <table id="contacts-table">
+  <table id="contacts-table" aria-describedby="contactTableDesc">
+    <caption id="contactTableDesc">List of submitted contact form messages</caption>
     <thead>
       <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Submitted At</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -34,9 +39,13 @@
 
   <script>
     fetch('https://pioneer-pressure-washing.onrender.com/api/admin/contacts')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         const tbody = document.querySelector('#contacts-table tbody');
+        tbody.innerHTML = ''; // Clear existing rows if any
         data.forEach(contact => {
           const row = document.createElement('tr');
           row.innerHTML = `
