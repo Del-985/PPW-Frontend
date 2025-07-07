@@ -1,7 +1,12 @@
 document.addEventListener('DOMContentLoaded', async function () {
   setupScheduleForm();
   loadContacts();
-  await renderCalendar();
+  try {
+    await renderCalendar();
+  } catch (err) {
+    console.error('Calendar rendering failed:', err);
+    renderCalendarFallback();
+  }
 });
 
 function setupScheduleForm() {
@@ -36,46 +41,43 @@ function setupScheduleForm() {
   }
 }
 
-async function loadContacts() {
+function loadContacts() {
   const contactsDiv = document.getElementById('contacts');
-  try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
-      credentials: 'include'
+  if (!contactsDiv) return;
+
+  fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data) || data.length === 0) {
+        contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
+        return;
+      }
+
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
+        </thead>
+        <tbody>
+          ${data.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${row.email}</td>
+              <td>${row.message}</td>
+              <td>${new Date(row.submitted_at).toLocaleString()}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+      contactsDiv.innerHTML = '';
+      contactsDiv.appendChild(table);
+    })
+    .catch(err => {
+      contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
+      console.error(err);
     });
-    const data = await res.json();
-
-    if (!Array.isArray(data)) {
-      contactsDiv.innerHTML = '<p>No contacts found.</p>';
-      return;
-    }
-
-    if (data.length === 0) {
-      contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
-      return;
-    }
-
-    const table = document.createElement('table');
-    table.innerHTML = `
-      <thead>
-        <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
-      </thead>
-      <tbody>
-        ${data.map(row => `
-          <tr>
-            <td>${row.name}</td>
-            <td>${row.email}</td>
-            <td>${row.message}</td>
-            <td>${new Date(row.submitted_at).toLocaleString()}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    `;
-    contactsDiv.innerHTML = '';
-    contactsDiv.appendChild(table);
-  } catch (err) {
-    contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
-    console.error(err);
-  }
 }
 
 async function renderCalendar() {
@@ -90,21 +92,17 @@ async function renderCalendar() {
 
   const taskMap = {};
 
-  try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
-      credentials: 'include'
-    });
-    const tasks = await res.json();
+  const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
+    credentials: 'include'
+  });
+  const tasks = await res.json();
 
-    tasks.forEach(task => {
-      const taskDate = new Date(task.scheduled_date);
-      const day = taskDate.getDate();
-      if (!taskMap[day]) taskMap[day] = [];
-      taskMap[day].push(task);
-    });
-  } catch (err) {
-    console.error('Failed to fetch schedule tasks:', err);
-  }
+  tasks.forEach(task => {
+    const taskDate = new Date(task.scheduled_date);
+    const day = taskDate.getDate();
+    if (!taskMap[day]) taskMap[day] = [];
+    taskMap[day].push(task);
+  });
 
   for (let i = 1; i <= daysInMonth; i++) {
     const dayBox = document.createElement('div');
@@ -120,6 +118,25 @@ async function renderCalendar() {
         dayBox.appendChild(note);
       });
     }
+
+    calendar.appendChild(dayBox);
+  }
+}
+
+function renderCalendarFallback() {
+  const calendar = document.getElementById('calendar');
+  if (!calendar) return;
+  calendar.innerHTML = '';
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayBox = document.createElement('div');
+    dayBox.className = 'calendar-day';
+    dayBox.innerHTML = `<span>${i}</span>`;
 
     calendar.appendChild(dayBox);
   }
