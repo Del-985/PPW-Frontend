@@ -67,3 +67,39 @@ h2, h3 {
   text-align: center;
   padding: 20px;
 }
+
+/* styles.css */
+
+/* Admin dashboard styles */
+body.admin {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+body.admin table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+body.admin th,
+body.admin td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.btn-delete {
+  color: red;
+  cursor: pointer;
+}
+
+.container nav button.logout-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #007bff;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
