@@ -1,0 +1,17 @@
+{
+  "name": "pioneer-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Pioneer Pressure Washing and Landscaping",
+  "private": true,
+  "scripts": {
+    "start": "live-server --open=./index.html --port=3000",
+    "build": "echo \"Add your build steps here\""
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.11"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
