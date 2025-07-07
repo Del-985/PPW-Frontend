@@ -10,6 +10,7 @@ PPW-Frontend/
 │   ├── contact.js
 │   ├── login.js
 │   ├── register.js
+|   ├── dashboard.js
 ├── business/
 │   └── register.html
 
