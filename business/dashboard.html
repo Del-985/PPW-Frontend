@@ -25,6 +25,27 @@
   <p>Welcome! You’ve successfully logged in.</p>
 
   <section style="margin-top: 2rem;">
+  <h3>Schedule a Service</h3>
+  <form id="schedule-form">
+    <label>Service Type:</label><br>
+    <input type="text" name="service_type" required><br>
+
+    <label>Date:</label><br>
+    <input type="date" name="scheduled_date" required><br>
+
+    <label>Time:</label><br>
+    <input type="time" name="scheduled_time" required><br>
+
+    <label>Notes (optional):</label><br>
+    <textarea name="notes"></textarea><br>
+
+    <button type="submit">Schedule</button>
+    <div id="scheduleResponse" style="margin-top: 1rem;"></div>
+  </form>
+</section>
+
+
+  <section style="margin-top: 2rem;">
     <h3>Tools</h3>
     <ul>
       <li><a href="#">View Invoices (coming soon)</a></li>
