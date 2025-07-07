@@ -47,16 +47,21 @@
 <script>
   async function loadContacts() {
     const contactsDiv = document.getElementById('contacts');
-    try {
-      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts');
-      const data = await res.json();
 
-      if (!Array.isArray(data)) {
-        contactsDiv.innerHTML = '<p>No contacts found.</p>';
+    try {
+      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
+        method: 'GET',
+        credentials: 'include' // Send cookies
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        window.location.href = '../portal.html';
         return;
       }
 
-      if (data.length === 0) {
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
         contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
         return;
       }
