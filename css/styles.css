@@ -68,8 +68,6 @@ h2, h3 {
   padding: 20px;
 }
 
-/* styles.css */
-
 /* Admin dashboard styles */
 body.admin {
   font-family: sans-serif;
@@ -104,3 +102,37 @@ body.admin td {
   text-decoration: underline;
 }
 
+/* Calendar grid */
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.calendar-day {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 80px;
+  text-align: left;
+  font-size: 14px;
+  background-color: var(--color-accent-light);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.calendar-day:hover {
+  background-color: #cdeffc;
+}
+
+.calendar-day span {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
