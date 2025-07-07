@@ -99,9 +99,11 @@ async function renderCalendar() {
 
   tasks.forEach(task => {
     const taskDate = new Date(task.scheduled_date);
-    const day = taskDate.getDate();
-    if (!taskMap[day]) taskMap[day] = [];
-    taskMap[day].push(task);
+    if (taskDate.getFullYear() === year && taskDate.getMonth() === month) {
+      const day = taskDate.getDate();
+      if (!taskMap[day]) taskMap[day] = [];
+      taskMap[day].push(task);
+    }
   });
 
   for (let i = 1; i <= daysInMonth; i++) {
