@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Schedule form submission handler
+document.addEventListener('DOMContentLoaded', function () {
+  setupScheduleForm();
+  loadContacts();
+  renderCalendar();
+});
+
+function setupScheduleForm() {
   const scheduleForm = document.getElementById('schedule-form');
   if (scheduleForm) {
     scheduleForm.addEventListener('submit', async (e) => {
@@ -29,44 +34,79 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+}
 
-  // Initialize FullCalendar with demo tasks (if calendar container exists)
-  const calendarEl = document.getElementById('calendar');
-  if (calendarEl) {
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      events: [
-        { title: 'Demo Task A', start: '2025-07-03' },
-        { title: 'Cleanup Job - West', start: '2025-07-07', allDay: true },
-      ],
+async function loadContacts() {
+  const contactsDiv = document.getElementById('contacts');
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
+      credentials: 'include'
     });
-    calendar.render();
-  }
+    const data = await res.json();
 
-  // Load contact form submissions (if table body exists)
-  const submissionsBody = document.getElementById('submissionTableBody');
-  if (submissionsBody) {
-    fetch('/admin/submissions')
-      .then(res => res.json())
-      .then(data => {
-        data.forEach(entry => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${entry.name}</td>
-            <td>${entry.email}</td>
-            <td>${entry.message}</td>
-            <td>${entry.created_at || 'N/A'}</td>
-          `;
-          submissionsBody.appendChild(row);
-        });
-      })
-      .catch(err => {
-        console.error('❌ Failed to load submissions:', err);
-      });
-  }
-});
+    if (!Array.isArray(data)) {
+      contactsDiv.innerHTML = '<p>No contacts found.</p>';
+      return;
+    }
 
-// Logout function (call from onclick or button)
+    if (data.length === 0) {
+      contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
+      </thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td>${row.name}</td>
+            <td>${row.email}</td>
+            <td>${row.message}</td>
+            <td>${new Date(row.submitted_at).toLocaleString()}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+    contactsDiv.innerHTML = '';
+    contactsDiv.appendChild(table);
+  } catch (err) {
+    contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
+    console.error(err);
+  }
+}
+
+function renderCalendar() {
+  const calendar = document.getElementById('calendar');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  calendar.innerHTML = '';
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayBox = document.createElement('div');
+    dayBox.className = 'calendar-day';
+    dayBox.innerHTML = `<span>${i}</span>`;
+
+    dayBox.addEventListener('click', () => {
+      const task = prompt(`Enter task for ${month + 1}/${i}/${year}`);
+      if (task) {
+        const note = document.createElement('div');
+        note.textContent = task;
+        note.style.fontSize = '12px';
+        note.style.marginTop = '18px';
+        dayBox.appendChild(note);
+      }
+    });
+
+    calendar.appendChild(dayBox);
+  }
+}
+
 function logout() {
   localStorage.clear();
   window.location.href = '/';
