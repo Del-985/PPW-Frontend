@@ -24,14 +24,12 @@
   <h2>Business Dashboard</h2>
   <p>Welcome! You’ve successfully logged in.</p>
 
- <section style="margin-top: 3rem;">
-  <h3>Scheduled Tasks</h3>
-  <div id="calendar-container">
-    <div id="calendar"></div>
-  </div>
-</section>
-
-
+  <section style="margin-top: 3rem;">
+    <h3>Scheduled Tasks</h3>
+    <div id="calendar-container">
+      <div id="calendar"></div>
+    </div>
+  </section>
 
   <section style="margin-top: 2rem;">
     <h3>Tools</h3>
@@ -53,55 +51,6 @@
 <footer class="footer">
   <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
 </footer>
-
-<script>
-  async function loadContacts() {
-    const contactsDiv = document.getElementById('contacts');
-
-    try {
-      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
-        method: 'GET',
-        credentials: 'include' // Send cookies
-      });
-
-      if (res.status === 401 || res.status === 403) {
-        window.location.href = '../portal.html';
-        return;
-      }
-
-      const data = await res.json();
-
-      if (!Array.isArray(data) || data.length === 0) {
-        contactsDiv.innerHTML = '<p>No contact submissions yet.</p>';
-        return;
-      }
-
-      const table = document.createElement('table');
-      table.innerHTML = `
-        <thead>
-          <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th></tr>
-        </thead>
-        <tbody>
-          ${data.map(row => `
-            <tr>
-              <td>${row.name}</td>
-              <td>${row.email}</td>
-              <td>${row.message}</td>
-              <td>${new Date(row.submitted_at).toLocaleString()}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      `;
-      contactsDiv.innerHTML = '';
-      contactsDiv.appendChild(table);
-    } catch (err) {
-      contactsDiv.innerHTML = '<p style="color:red;">Failed to load contacts.</p>';
-      console.error(err);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', loadContacts);
-</script>
 
 </body>
 </html>
