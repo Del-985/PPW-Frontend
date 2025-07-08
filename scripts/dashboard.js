@@ -121,21 +121,34 @@ async function renderCalendar() {
     if (taskMap[i]) {
       taskMap[i].forEach(task => {
         const note = document.createElement('div');
-        note.textContent = `${task.service_type} @ ${task.scheduled_time}`;
+        note.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
         dayBox.appendChild(note);
       });
     }
 
-    dayBox.addEventListener('click', () => {
-      const task = prompt(`Enter task for ${month + 1}/${i}/${year}`);
-      if (task) {
-        const note = document.createElement('div');
-        note.textContent = task;
-        note.style.fontSize = '12px';
-        note.style.marginTop = '4px';
-        dayBox.appendChild(note);
+    dayBox.addEventListener('click', async () => {
+      const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
+      if (service_type) {
+        const scheduled_date = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+        const scheduled_time = '12:00';
+        const notes = '';
+
+        try {
+          const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ service_type, scheduled_date, scheduled_time, notes })
+          });
+
+          if (res.ok) {
+            await renderCalendar();
+          }
+        } catch (err) {
+          console.error('Inline scheduling failed', err);
+        }
       }
     });
 
