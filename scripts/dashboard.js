@@ -33,6 +33,11 @@ function setupScheduleForm() {
         const data = await res.json();
         responseBox.textContent = data.message || data.error;
         responseBox.style.color = res.ok ? 'green' : 'red';
+
+        if (res.ok) {
+          form.reset();
+          await renderCalendar();
+        }
       } catch (err) {
         responseBox.textContent = 'An error occurred.';
         responseBox.style.color = 'red';
@@ -96,6 +101,8 @@ async function renderCalendar() {
     credentials: 'include'
   });
   const tasks = await res.json();
+
+  if (!Array.isArray(tasks)) throw new Error('Invalid schedule response');
 
   tasks.forEach(task => {
     const taskDate = new Date(task.scheduled_date);
