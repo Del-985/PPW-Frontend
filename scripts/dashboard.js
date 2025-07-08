@@ -100,7 +100,10 @@ async function renderCalendar() {
     credentials: 'include'
   });
 
-  const { tasks } = await res.json(); // ← FIXED: Destructure `tasks` from object
+  const data = await res.json();
+if (!Array.isArray(data)) throw new Error('Invalid schedule response');
+const tasks = data;
+
 
   if (!Array.isArray(tasks)) throw new Error('Invalid schedule response');
 
