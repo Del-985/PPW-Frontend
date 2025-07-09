@@ -104,12 +104,11 @@ async function renderCalendar() {
   const data = await res.json();
   if (!Array.isArray(data)) throw new Error('Invalid schedule response');
 
-  // Normalize date strings to YYYY-MM-DD
   const monthPrefix = (month + 1).toString().padStart(2, '0');
   const currentMonth = `${year}-${monthPrefix}`;
 
   data.forEach(task => {
-    const dateStr = task.scheduled_date; // assumes YYYY-MM-DD
+    const dateStr = task.scheduled_date;
     if (dateStr.startsWith(currentMonth)) {
       const day = parseInt(dateStr.split('-')[2], 10);
       if (!taskMap[day]) taskMap[day] = [];
@@ -128,6 +127,21 @@ async function renderCalendar() {
         note.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
+
+        switch (task.status.toLowerCase()) {
+          case 'approved':
+            note.style.color = 'green';
+            break;
+          case 'pending':
+            note.style.color = 'orange';
+            break;
+          case 'denied':
+            note.style.color = 'red';
+            break;
+          default:
+            note.style.color = 'gray';
+        }
+
         dayBox.appendChild(note);
       });
     }
@@ -159,7 +173,6 @@ async function renderCalendar() {
     calendar.appendChild(dayBox);
   }
 }
-
 
 function renderCalendarFallback() {
   const calendar = document.getElementById('calendar');
