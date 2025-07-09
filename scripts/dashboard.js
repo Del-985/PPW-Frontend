@@ -84,6 +84,7 @@ function loadContacts() {
       console.error(err);
     });
 }
+
 async function renderCalendar() {
   const calendar = document.getElementById('calendar');
   if (!calendar) return;
@@ -101,16 +102,13 @@ async function renderCalendar() {
   });
 
   const data = await res.json();
-if (!Array.isArray(data)) throw new Error('Invalid schedule response');
-const tasks = data;
-
-
-  if (!Array.isArray(tasks)) throw new Error('Invalid schedule response');
+  if (!Array.isArray(data)) throw new Error('Invalid schedule response');
+  const tasks = data;
 
   tasks.forEach(task => {
-    const taskDate = new Date(task.scheduled_date);
-    if (taskDate.getFullYear() === year && taskDate.getMonth() === month) {
-      const day = taskDate.getDate();
+    const taskDate = new Date(task.scheduled_date + 'T00:00:00Z'); // UTC safe
+    if (taskDate.getUTCFullYear() === year && taskDate.getUTCMonth() === month) {
+      const day = taskDate.getUTCDate(); // Safe extraction
       if (!taskMap[day]) taskMap[day] = [];
       taskMap[day].push(task);
     }
