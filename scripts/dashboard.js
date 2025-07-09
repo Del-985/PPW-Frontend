@@ -103,12 +103,15 @@ async function renderCalendar() {
 
   const data = await res.json();
   if (!Array.isArray(data)) throw new Error('Invalid schedule response');
-  const tasks = data;
 
-  tasks.forEach(task => {
-    const taskDate = new Date(task.scheduled_date + 'T00:00:00Z'); // UTC safe
-    if (taskDate.getUTCFullYear() === year && taskDate.getUTCMonth() === month) {
-      const day = taskDate.getUTCDate(); // Safe extraction
+  // Normalize date strings to YYYY-MM-DD
+  const monthPrefix = (month + 1).toString().padStart(2, '0');
+  const currentMonth = `${year}-${monthPrefix}`;
+
+  data.forEach(task => {
+    const dateStr = task.scheduled_date; // assumes YYYY-MM-DD
+    if (dateStr.startsWith(currentMonth)) {
+      const day = parseInt(dateStr.split('-')[2], 10);
       if (!taskMap[day]) taskMap[day] = [];
       taskMap[day].push(task);
     }
@@ -145,7 +148,7 @@ async function renderCalendar() {
           });
 
           if (res.ok) {
-            await renderCalendar(); // Refresh calendar after inline post
+            await renderCalendar();
           }
         } catch (err) {
           console.error('Inline scheduling failed', err);
