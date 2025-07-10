@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
   try {
+    // 🔒 Verify authentication and admin status
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
       credentials: 'include'
     });
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       return;
     }
 
-    // If admin, load dashboard
+    // ✅ If admin, load admin dashboard features
     setupScheduleForm();
     loadContacts();
     try {
