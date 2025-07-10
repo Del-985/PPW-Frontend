@@ -1,11 +1,32 @@
 document.addEventListener('DOMContentLoaded', async function () {
-  setupScheduleForm();
-  loadContacts();
   try {
-    await renderCalendar();
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Unauthorized');
+
+    const user = await res.json();
+
+    if (!user.is_admin) {
+      alert('Access denied. Admins only.');
+      window.location.href = '/portal.html'; // or '/'
+      return;
+    }
+
+    // If admin, load dashboard
+    setupScheduleForm();
+    loadContacts();
+    try {
+      await renderCalendar();
+    } catch (err) {
+      console.error('Calendar rendering failed:', err);
+      renderCalendarFallback();
+    }
+
   } catch (err) {
-    console.error('Calendar rendering failed:', err);
-    renderCalendarFallback();
+    console.error('Authentication check failed:', err);
+    window.location.href = '/portal.html'; // Redirect to login
   }
 });
 
