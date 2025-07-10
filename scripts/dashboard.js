@@ -132,7 +132,7 @@ async function renderCalendar() {
         else if (task.status === 'Denied') note.style.color = 'red';
         else note.style.color = 'orange';
 
-        // Action buttons
+        // Edit/Delete controls
         const actions = document.createElement('div');
         actions.style.marginTop = '2px';
 
@@ -140,47 +140,52 @@ async function renderCalendar() {
         editBtn.textContent = 'Edit';
         editBtn.style.marginRight = '4px';
         editBtn.style.fontSize = '10px';
+
         editBtn.onclick = async () => {
           const newService = prompt('New service type:', task.service_type);
+          if (!newService) return;
+
           const newTime = prompt('New time (HH:MM):', task.scheduled_time);
-          const newStatus = prompt('New status (Pending/Approved/Denied):', task.status);
+          if (!newTime) return;
 
-          if (newService && newTime && newStatus) {
-            const updateRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify({
-                service_type: newService,
-                scheduled_time: newTime,
-                status: newStatus
-              })
-            });
+          const newNotes = prompt('Edit notes:', task.notes || '');
+          if (newNotes === null) return;
 
-            if (updateRes.ok) {
-              await renderCalendar();
-            } else {
-              alert('Failed to update.');
-            }
+          const updateRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              service_type: newService,
+              scheduled_time: newTime,
+              notes: newNotes
+            })
+          });
+
+          if (updateRes.ok) {
+            await renderCalendar();
+          } else {
+            alert('Failed to update.');
           }
         };
 
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         deleteBtn.style.fontSize = '10px';
+
         deleteBtn.onclick = async () => {
           const confirmed = confirm('Delete this entry?');
-          if (confirmed) {
-            const delRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
-              method: 'DELETE',
-              credentials: 'include'
-            });
+          if (!confirmed) return;
 
-            if (delRes.ok) {
-              await renderCalendar();
-            } else {
-              alert('Failed to delete.');
-            }
+          const delRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+
+          if (delRes.ok) {
+            await renderCalendar();
+          } else {
+            alert('Failed to delete.');
           }
         };
 
