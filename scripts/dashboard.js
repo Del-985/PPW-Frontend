@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
   try {
-    // 🔒 Verify authentication and admin status
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
       credentials: 'include'
     });
@@ -11,11 +10,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (!user.is_admin) {
       alert('Access denied. Admins only.');
-      window.location.href = '/portal.html'; // or '/'
+      location.replace('/portal.html'); // More reliable than href
       return;
     }
 
-    // ✅ If admin, load admin dashboard features
+    // ✅ Admin access granted
     setupScheduleForm();
     loadContacts();
     try {
@@ -26,8 +25,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
   } catch (err) {
-    console.error('Authentication check failed:', err);
-    window.location.href = '/portal.html'; // Redirect to login
+    console.error('Auth failure:', err);
+    location.replace('/portal.html'); // Use replace to prevent back nav
   }
 });
 
