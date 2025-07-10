@@ -24,27 +24,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (res.ok) {
         // Delay to allow browser to set cookie
-        setTimeout(async () => {
-          try {
-            const userRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
-              credentials: 'include'
-            });
+       setTimeout(async () => {
+  console.log('Cookies at redirect time:', document.cookie); // Debug output
 
-            if (!userRes.ok) throw new Error('Failed to fetch user');
+  const checkRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
+    credentials: 'include'
+  });
 
-            const user = await userRes.json();
-
-            if (user.is_admin) {
-              window.location.href = '/admin.html';
-            } else {
-              window.location.href = '/business/dashboard.html';
-            }
-          } catch (authErr) {
-            console.error('Auth fetch error:', authErr);
-            responseBox.textContent = 'Authentication failed after login.';
-            responseBox.style.color = 'red';
-          }
-        }, 500); // ⏱️ 500ms delay
+  if (checkRes.ok) {
+    const user = await checkRes.json();
+    console.log('User:', user);
+    if (user.is_admin) {
+      location.href = '/admin/admin.html';
+    } else {
+      location.href = '/business/dashboard.html';
+    }
+  } else {
+    console.error('Auth check failed:', await checkRes.text());
+    alert('Login successful but authentication check failed.');
+  }
+}, 500);
       }
 
     } catch (err) {
