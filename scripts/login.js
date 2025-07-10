@@ -1,44 +1,56 @@
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+  const loginForm = document.getElementById('login-form');
+  if (!loginForm) return;
 
-  const email = e.target.email.value.trim();
-  const password = e.target.password.value.trim();
-  const responseBox = document.getElementById('loginResponse');
+  loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-  try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-      credentials: 'include' // ← Important for sending/receiving cookies
-    });
+    const email = loginForm.email.value.trim();
+    const password = loginForm.password.value;
 
-    const data = await res.json();
+    const responseBox = document.getElementById('loginResponse');
 
-   if (res.ok) {
-  responseBox.textContent = 'Login successful. Redirecting to dashboard...';
-  responseBox.style.color = 'green';
+    try {
+      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
 
-  const meRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
-    credentials: 'include'
+      const data = await res.json();
+      responseBox.textContent = data.message || data.error;
+      responseBox.style.color = res.ok ? 'green' : 'red';
+
+      if (res.ok) {
+        // Delay to allow browser to set cookie
+        setTimeout(async () => {
+          try {
+            const userRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
+              credentials: 'include'
+            });
+
+            if (!userRes.ok) throw new Error('Failed to fetch user');
+
+            const user = await userRes.json();
+
+            if (user.is_admin) {
+              window.location.href = '/admin.html';
+            } else {
+              window.location.href = '/business/dashboard.html';
+            }
+          } catch (authErr) {
+            console.error('Auth fetch error:', authErr);
+            responseBox.textContent = 'Authentication failed after login.';
+            responseBox.style.color = 'red';
+          }
+        }, 500); // ⏱️ 500ms delay
+      }
+
+    } catch (err) {
+      console.error('Login error:', err);
+      responseBox.textContent = 'Login request failed.';
+      responseBox.style.color = 'red';
+    }
   });
-
-  if (meRes.ok) {
-    const user = await meRes.json();
-    const redirectUrl = user.is_admin ? '/admin.html' : '../business/dashboard.html';
-    setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 1500);
-  } else {
-    responseBox.textContent = 'Login failed: Unable to verify user.';
-    responseBox.style.color = 'red';
-  }
-}
-
-    console.log('Login response:', res.status, data); // Optional debug
-  } catch (err) {
-    console.error('Login request failed:', err);
-    responseBox.textContent = 'An error occurred. Please try again later.';
-    responseBox.style.color = 'red';
-  }
 });
