@@ -8,15 +8,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const user = await res.json();
 
-    if (!user.is_admin) {
+    const isAdminPage = window.location.pathname.includes('admin.html');
+
+    if (isAdminPage && !user.is_admin) {
       alert('Access denied. Admins only.');
-      location.replace('/portal.html'); // More reliable than href
+      location.replace('/portal.html');
       return;
     }
 
-    // ✅ Admin access granted
+    // ✅ Proceed with loading dashboard content
     setupScheduleForm();
     loadContacts();
+
     try {
       await renderCalendar();
     } catch (err) {
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   } catch (err) {
     console.error('Auth failure:', err);
-    location.replace('/portal.html'); // Use replace to prevent back nav
+    location.replace('/portal.html');
   }
 });
 
