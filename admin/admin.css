@@ -1,0 +1,142 @@
+/* admin.css */
+
+/* Global styles */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #1a1a1a;
+}
+
+/* Schedule form */
+form#schedule-form {
+  background: #fff;
+  padding: 16px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+form#schedule-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+form#schedule-form input,
+form#schedule-form select,
+form#schedule-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form#schedule-form button {
+  padding: 10px 16px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form#schedule-form button:hover {
+  background-color: #0b5ed7;
+}
+
+/* Response message */
+#scheduleResponse {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table thead {
+  background-color: #e9ecef;
+}
+
+table th, table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table td button {
+  margin-right: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+table td button:hover {
+  opacity: 0.8;
+}
+
+button.edit {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+button.delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Calendar */
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.calendar-day {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px;
+  min-height: 100px;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+.calendar-day span {
+  font-weight: bold;
+}
+
+.calendar-day div {
+  font-size: 12px;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  #calendar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  form#schedule-form input,
+  form#schedule-form select,
+  form#schedule-form textarea {
+    font-size: 14px;
+  }
+}
