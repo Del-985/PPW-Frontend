@@ -15,16 +15,25 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 
     const data = await res.json();
 
-    if (res.ok) {
-      responseBox.textContent = 'Login successful. Redirecting to dashboard...';
-      responseBox.style.color = 'green';
-      setTimeout(() => {
-        window.location.href = '../business/dashboard.html';
-      }, 1500);
-    } else {
-      responseBox.textContent = data.error || 'Invalid email or password.';
-      responseBox.style.color = 'red';
-    }
+   if (res.ok) {
+  responseBox.textContent = 'Login successful. Redirecting to dashboard...';
+  responseBox.style.color = 'green';
+
+  const meRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
+    credentials: 'include'
+  });
+
+  if (meRes.ok) {
+    const user = await meRes.json();
+    const redirectUrl = user.is_admin ? '/admin.html' : '../business/dashboard.html';
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 1500);
+  } else {
+    responseBox.textContent = 'Login failed: Unable to verify user.';
+    responseBox.style.color = 'red';
+  }
+}
 
     console.log('Login response:', res.status, data); // Optional debug
   } catch (err) {
