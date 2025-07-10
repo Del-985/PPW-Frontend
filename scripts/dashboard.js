@@ -96,7 +96,6 @@ async function renderCalendar() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const taskMap = {};
-
   const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
     credentials: 'include'
   });
@@ -128,20 +127,66 @@ async function renderCalendar() {
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
 
-        switch (task.status.toLowerCase()) {
-          case 'approved':
-            note.style.color = 'green';
-            break;
-          case 'pending':
-            note.style.color = 'orange';
-            break;
-          case 'denied':
-            note.style.color = 'red';
-            break;
-          default:
-            note.style.color = 'gray';
-        }
+        // Color based on status
+        if (task.status === 'Approved') note.style.color = 'green';
+        else if (task.status === 'Denied') note.style.color = 'red';
+        else note.style.color = 'orange';
 
+        // Action buttons
+        const actions = document.createElement('div');
+        actions.style.marginTop = '2px';
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.style.marginRight = '4px';
+        editBtn.style.fontSize = '10px';
+        editBtn.onclick = async () => {
+          const newService = prompt('New service type:', task.service_type);
+          const newTime = prompt('New time (HH:MM):', task.scheduled_time);
+          const newStatus = prompt('New status (Pending/Approved/Denied):', task.status);
+
+          if (newService && newTime && newStatus) {
+            const updateRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                service_type: newService,
+                scheduled_time: newTime,
+                status: newStatus
+              })
+            });
+
+            if (updateRes.ok) {
+              await renderCalendar();
+            } else {
+              alert('Failed to update.');
+            }
+          }
+        };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.fontSize = '10px';
+        deleteBtn.onclick = async () => {
+          const confirmed = confirm('Delete this entry?');
+          if (confirmed) {
+            const delRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
+              method: 'DELETE',
+              credentials: 'include'
+            });
+
+            if (delRes.ok) {
+              await renderCalendar();
+            } else {
+              alert('Failed to delete.');
+            }
+          }
+        };
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+        note.appendChild(actions);
         dayBox.appendChild(note);
       });
     }
