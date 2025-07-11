@@ -1,3 +1,5 @@
+let selectedEntryIds = new Set();
+
 document.addEventListener('DOMContentLoaded', async function () {
   try {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
@@ -146,8 +148,25 @@ async function renderCalendar() {
 
     if (taskMap[i]) {
       taskMap[i].forEach(task => {
-        const note = document.createElement('div');
-        note.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
+       const note = document.createElement('div');
+note.style.fontSize = '12px';
+note.style.marginTop = '4px';
+
+// Add checkbox for bulk selection
+const checkbox = document.createElement('input');
+checkbox.type = 'checkbox';
+checkbox.style.marginRight = '4px';
+checkbox.checked = selectedEntryIds.has(task.id);
+checkbox.addEventListener('change', () => {
+  if (checkbox.checked) selectedEntryIds.add(task.id);
+  else selectedEntryIds.delete(task.id);
+});
+note.appendChild(checkbox);
+
+// Label text
+const label = document.createElement('span');
+label.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
+note.appendChild(label);
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
 
