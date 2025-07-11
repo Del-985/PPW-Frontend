@@ -222,7 +222,7 @@ async function sendBulkAction(status) {
 // Individual approval/denial
 async function sendIndividualAction(taskId, status) {
   try {
-    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}/status`, {
+    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -232,14 +232,14 @@ async function sendIndividualAction(taskId, status) {
     if (res.ok) {
       await loadAdminSchedule();
     } else {
-      const data = await res.json();
-      throw new Error(data.error || 'Failed to update status.');
+      const err = await res.json().catch(() => ({}));
+      alert(err.message || 'Failed to update status.');
     }
   } catch (err) {
-    console.error(err);
-    alert('Failed to update status.');
+    console.error('Unexpected error:', err);
+    alert('An error occurred while updating.');
   }
-}
+}}
 
 
 function logout() {
