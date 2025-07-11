@@ -245,6 +245,18 @@ async function renderCalendar() {
     });
 
     calendar.appendChild(dayBox);
+    
+    const bulkControls = document.getElementById('bulkControls');
+if (bulkControls) {
+  bulkControls.innerHTML = `
+    <button id="bulkApprove">Approve Selected</button>
+    <button id="bulkDeny">Deny Selected</button>
+    <span id="bulkStatus" style="margin-left:10px;"></span>
+  `;
+
+  document.getElementById('bulkApprove').onclick = () => sendBulkAction('Approved');
+  document.getElementById('bulkDeny').onclick = () => sendBulkAction('Denied');
+}
   }
 }
 
@@ -275,6 +287,39 @@ function renderCalendarFallback() {
     });
 
     calendar.appendChild(dayBox);
+  }
+}
+
+async function sendBulkAction(status) {
+  const ids = Array.from(selectedEntryIds);
+  if (ids.length === 0) {
+    alert('No entries selected.');
+    return;
+  }
+
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/status/bulk', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ ids, status })
+    });
+
+    const data = await res.json();
+    const msgBox = document.getElementById('bulkStatus');
+
+    if (res.ok) {
+      msgBox.textContent = `Updated ${data.updated.length} entries.`;
+      msgBox.style.color = 'green';
+      selectedEntryIds.clear();
+      await renderCalendar();
+    } else {
+      msgBox.textContent = data.error || 'Failed.';
+      msgBox.style.color = 'red';
+    }
+  } catch (err) {
+    console.error('Bulk action error:', err);
+    document.getElementById('bulkStatus').textContent = 'Error';
   }
 }
 
