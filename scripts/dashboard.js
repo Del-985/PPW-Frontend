@@ -1,4 +1,4 @@
-let selectedEntryIds = new Set();
+ let selectedEntryIds = new Set();
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
@@ -236,29 +236,32 @@ async function renderCalendar() {
     }
 
     // Inline scheduling
-    dayBox.addEventListener('click', async () => {
-      const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
-      if (service_type) {
-        const scheduled_date = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
-        const scheduled_time = '12:00';
-        const notes = '';
+    dayBox.addEventListener('click', async (e) => {
+  // Ignore if click target is a button or input
+  if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
 
-        try {
-          const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ service_type, scheduled_date, scheduled_time, notes })
-          });
+  const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
+  if (service_type) {
+    const scheduled_date = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+    const scheduled_time = '12:00';
+    const notes = '';
 
-          if (res.ok) {
-            await renderCalendar();
-          }
-        } catch (err) {
-          console.error('Inline scheduling failed', err);
-        }
+    try {
+      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ service_type, scheduled_date, scheduled_time, notes })
+      });
+
+      if (res.ok) {
+        await renderCalendar();
       }
-    });
+    } catch (err) {
+      console.error('Inline scheduling failed', err);
+    }
+  }
+});
 
     calendar.appendChild(dayBox);
   }
