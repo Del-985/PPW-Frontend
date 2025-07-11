@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (!res.ok) throw new Error('Unauthorized');
 
     const user = await res.json();
+   console.log('[DEBUG] Logged in user:', user);
 
     const isAdminPage = window.location.pathname.includes('admin.html');
 
