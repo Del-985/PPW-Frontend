@@ -190,25 +190,39 @@ async function loadAdminSchedule() {
   }
 }
 
+// Bulk approval/denial
 async function sendBulkAction(status) {
-  if (selectedEntryIds.size === 0) return;
-  const res = await fetch('/api/admin/schedule/status/bulk', {
-    method: 'PATCH',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ids: Array.from(selectedEntryIds), status })
-  });
-  if (res.ok) {
-    selectedEntryIds.clear();
-    await loadAdminSchedule();
-  } else {
-    alert('Bulk update failed');
+  if (selectedEntryIds.size === 0) {
+    alert('No entries selected.');
+    return;
+  }
+
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/status/bulk', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ ids: Array.from(selectedEntryIds), status })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      selectedEntryIds.clear();
+      document.getElementById('bulkStatus').textContent = data.message || 'Bulk update successful.';
+      await loadAdminSchedule();
+    } else {
+      throw new Error(data.error || 'Bulk update failed');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Bulk action failed.');
   }
 }
 
+// Individual approval/denial
 async function sendIndividualAction(taskId, status) {
   try {
-    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}`, {
+    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -218,33 +232,12 @@ async function sendIndividualAction(taskId, status) {
     if (res.ok) {
       await loadAdminSchedule();
     } else {
-      alert('Failed to update status.');
+      const data = await res.json();
+      throw new Error(data.error || 'Failed to update status.');
     }
   } catch (err) {
     console.error(err);
-  }
-}
-
-async function sendBulkAction(status, ids) {
-  if (!ids.length) {
-    alert('No entries selected.');
-    return;
-  }
-
-  try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/bulk-update', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ ids, status })
-    });
-
-    const data = await res.json();
-    document.getElementById('bulkStatus').textContent = data.message || 'Updated';
-    await loadAdminSchedule();
-  } catch (err) {
-    console.error(err);
-    alert('Bulk action failed.');
+    alert('Failed to update status.');
   }
 }
 
