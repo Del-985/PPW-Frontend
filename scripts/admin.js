@@ -239,7 +239,7 @@ async function sendIndividualAction(taskId, status) {
     console.error('Unexpected error:', err);
     alert('An error occurred while updating.');
   }
-}}
+}
 
 
 function logout() {
