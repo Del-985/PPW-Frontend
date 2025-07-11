@@ -105,7 +105,6 @@ async function loadAdminSchedule() {
 
   const data = await res.json();
   const taskMap = {};
-  const selectedEntryIds = new Set();
 
   const monthPrefix = (month + 1).toString().padStart(2, '0');
   const currentMonth = `${year}-${monthPrefix}`;
