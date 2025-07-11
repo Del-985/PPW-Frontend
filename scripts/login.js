@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (checkRes.ok) {
     const user = await checkRes.json();
     console.log('User:', user);
-    if (res.is_admin) {
+    if (data.is_admin) {
       location.href = '/admin/admin.html';
     } else {
       location.href = '/business/dashboard.html';
