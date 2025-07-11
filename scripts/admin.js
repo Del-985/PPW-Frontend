@@ -1,3 +1,5 @@
+const selectedEntryIds = new Set();
+
 document.addEventListener('DOMContentLoaded', async function () {
   try {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
