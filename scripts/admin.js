@@ -141,7 +141,21 @@ async function loadAdminSchedule() {
   }
 }
 
-
+async function sendBulkAction(status) {
+  if (selectedEntryIds.size === 0) return;
+  const res = await fetch('/api/admin/schedule/status/bulk', {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids: Array.from(selectedEntryIds), status })
+  });
+  if (res.ok) {
+    selectedEntryIds.clear();
+    await loadAdminSchedule();
+  } else {
+    alert('Bulk update failed');
+  }
+}
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
