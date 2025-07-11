@@ -1,27 +1,25 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async function () {
   try {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
       credentials: 'include'
     });
-
     if (!res.ok) throw new Error('Unauthorized');
-
     const user = await res.json();
-    if (!user.is_admin) {
-      alert('Admins only. Access denied.');
+
+    const isAdminPage = window.location.pathname.includes('admin.html');
+
+    if (isAdminPage && !user.is_admin) {
+      alert('Admins only');
       location.replace('/portal.html');
       return;
     }
 
-    // ✅ Proceed with admin view
     loadContacts();
     loadBusinessUsers();
-    if (typeof renderCalendar === 'function') {
-      await renderCalendar();  // from dashboard.js
-    }
+    await loadAdminSchedule(); // 👈 New admin-specific calendar
 
   } catch (err) {
-    console.error('Admin auth check failed:', err);
+    console.error('Auth check failed:', err);
     location.replace('/portal.html');
   }
 });
@@ -88,6 +86,62 @@ async function deleteBusinessUser(id) {
   });
   loadBusinessUsers();
 }
+
+async function loadAdminSchedule() {
+  const calendar = document.getElementById('calendar');
+  if (!calendar) return;
+  calendar.innerHTML = '';
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule', {
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  const taskMap = {};
+
+  const monthPrefix = (month + 1).toString().padStart(2, '0');
+  const currentMonth = `${year}-${monthPrefix}`;
+
+  data.forEach(task => {
+    const dateStr = task.scheduled_date;
+    if (dateStr.startsWith(currentMonth)) {
+      const day = parseInt(dateStr.split('-')[2], 10);
+      if (!taskMap[day]) taskMap[day] = [];
+      taskMap[day].push(task);
+    }
+  });
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayBox = document.createElement('div');
+    dayBox.className = 'calendar-day';
+    dayBox.innerHTML = `<span>${i}</span>`;
+
+    if (taskMap[i]) {
+      taskMap[i].forEach(task => {
+        const note = document.createElement('div');
+        note.style.fontSize = '12px';
+        note.style.marginTop = '4px';
+        note.textContent = `${task.business_name}: ${task.service_type} @ ${task.scheduled_time} (${task.status})`;
+
+        // Optional: add color by status
+        if (task.status === 'Approved') note.style.color = 'green';
+        else if (task.status === 'Denied') note.style.color = 'red';
+        else note.style.color = 'orange';
+
+        dayBox.appendChild(note);
+      });
+    }
+
+    calendar.appendChild(dayBox);
+  }
+}
+
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
