@@ -238,7 +238,14 @@ async function renderCalendar() {
     // Inline scheduling
     dayBox.addEventListener('click', async (e) => {
   // Ignore if click target is a button or input
-  if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+  if (
+  e.target.closest('button') ||
+  e.target.closest('input') ||
+  e.target.closest('select') ||
+  e.target.closest('.calendar-control') // optional class name
+) {
+  return;
+}
 
   const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
   if (service_type) {
