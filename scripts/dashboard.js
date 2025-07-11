@@ -148,34 +148,32 @@ async function renderCalendar() {
 
     if (taskMap[i]) {
       taskMap[i].forEach(task => {
-       const note = document.createElement('div');
-note.style.fontSize = '12px';
-note.style.marginTop = '4px';
-
-// Add checkbox for bulk selection
-const checkbox = document.createElement('input');
-checkbox.type = 'checkbox';
-checkbox.style.marginRight = '4px';
-checkbox.checked = selectedEntryIds.has(task.id);
-checkbox.addEventListener('change', () => {
-  if (checkbox.checked) selectedEntryIds.add(task.id);
-  else selectedEntryIds.delete(task.id);
-});
-note.appendChild(checkbox);
-
-// Label text
-const label = document.createElement('span');
-label.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
-note.appendChild(label);
+        const note = document.createElement('div');
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
 
-        // Color based on status
+        // ⬛ Bulk selection checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.style.marginRight = '4px';
+        checkbox.checked = selectedEntryIds.has(task.id);
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) selectedEntryIds.add(task.id);
+          else selectedEntryIds.delete(task.id);
+        });
+        note.appendChild(checkbox);
+
+        // ⬛ Task label
+        const label = document.createElement('span');
+        label.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
+        note.appendChild(label);
+
+        // ⬛ Status color
         if (task.status === 'Approved') note.style.color = 'green';
         else if (task.status === 'Denied') note.style.color = 'red';
         else note.style.color = 'orange';
 
-        // Edit/Delete controls
+        // ⬛ Edit/Delete buttons
         const actions = document.createElement('div');
         actions.style.marginTop = '2px';
 
@@ -183,7 +181,6 @@ note.appendChild(label);
         editBtn.textContent = 'Edit';
         editBtn.style.marginRight = '4px';
         editBtn.style.fontSize = '10px';
-
         editBtn.onclick = async () => {
           const newService = prompt('New service type:', task.service_type);
           if (!newService) return;
@@ -215,7 +212,6 @@ note.appendChild(label);
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         deleteBtn.style.fontSize = '10px';
-
         deleteBtn.onclick = async () => {
           const confirmed = confirm('Delete this entry?');
           if (!confirmed) return;
@@ -239,6 +235,7 @@ note.appendChild(label);
       });
     }
 
+    // Inline scheduling
     dayBox.addEventListener('click', async () => {
       const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
       if (service_type) {
@@ -264,18 +261,19 @@ note.appendChild(label);
     });
 
     calendar.appendChild(dayBox);
-    
-    const bulkControls = document.getElementById('bulkControls');
-if (bulkControls) {
-  bulkControls.innerHTML = `
-    <button id="bulkApprove">Approve Selected</button>
-    <button id="bulkDeny">Deny Selected</button>
-    <span id="bulkStatus" style="margin-left:10px;"></span>
-  `;
+  }
 
-  document.getElementById('bulkApprove').onclick = () => sendBulkAction('Approved');
-  document.getElementById('bulkDeny').onclick = () => sendBulkAction('Denied');
-}
+  // ⬛ Bulk action control buttons (once)
+  const bulkControls = document.getElementById('bulkControls');
+  if (bulkControls) {
+    bulkControls.innerHTML = `
+      <button id="bulkApprove">Approve Selected</button>
+      <button id="bulkDeny">Deny Selected</button>
+      <span id="bulkStatus" style="margin-left:10px;"></span>
+    `;
+
+    document.getElementById('bulkApprove').onclick = () => sendBulkAction('Approved');
+    document.getElementById('bulkDeny').onclick = () => sendBulkAction('Denied');
   }
 }
 
