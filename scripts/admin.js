@@ -222,7 +222,7 @@ async function sendBulkAction(status) {
 // Individual approval/denial
 async function sendIndividualAction(taskId, status) {
   try {
-    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}`, {
+    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
