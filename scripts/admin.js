@@ -103,6 +103,7 @@ async function loadAdminSchedule() {
 
   const data = await res.json();
   const taskMap = {};
+  const selectedEntryIds = new Set();
 
   const monthPrefix = (month + 1).toString().padStart(2, '0');
   const currentMonth = `${year}-${monthPrefix}`;
@@ -126,18 +127,66 @@ async function loadAdminSchedule() {
         const note = document.createElement('div');
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
-        note.textContent = `${task.business_name}: ${task.service_type} @ ${task.scheduled_time} (${task.status})`;
 
-        // Optional: add color by status
+        // Create checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.style.marginRight = '4px';
+        checkbox.checked = selectedEntryIds.has(task.id);
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) selectedEntryIds.add(task.id);
+          else selectedEntryIds.delete(task.id);
+        });
+        note.appendChild(checkbox);
+
+        // Task text
+        const text = document.createElement('span');
+        text.textContent = `${task.business_name}: ${task.service_type} @ ${task.scheduled_time} (${task.status})`;
+        note.appendChild(text);
+
+        // Status color
         if (task.status === 'Approved') note.style.color = 'green';
         else if (task.status === 'Denied') note.style.color = 'red';
         else note.style.color = 'orange';
+
+        // Per-task controls
+        const controls = document.createElement('div');
+        controls.style.marginTop = '2px';
+
+        const approveBtn = document.createElement('button');
+        approveBtn.textContent = 'Approve';
+        approveBtn.style.fontSize = '10px';
+        approveBtn.onclick = () => sendIndividualAction(task.id, 'Approved');
+
+        const denyBtn = document.createElement('button');
+        denyBtn.textContent = 'Deny';
+        denyBtn.style.fontSize = '10px';
+        denyBtn.onclick = () => sendIndividualAction(task.id, 'Denied');
+
+        controls.appendChild(approveBtn);
+        controls.appendChild(denyBtn);
+        note.appendChild(controls);
 
         dayBox.appendChild(note);
       });
     }
 
     calendar.appendChild(dayBox);
+  }
+
+  // Bulk action buttons
+  const bulkDiv = document.getElementById('bulkControls');
+  if (bulkDiv) {
+    bulkDiv.innerHTML = `
+      <button id="bulkApprove">Approve Selected</button>
+      <button id="bulkDeny">Deny Selected</button>
+      <span id="bulkStatus" style="margin-left:10px;"></span>
+    `;
+
+    document.getElementById('bulkApprove').onclick = () =>
+      sendBulkAction('Approved', Array.from(selectedEntryIds));
+    document.getElementById('bulkDeny').onclick = () =>
+      sendBulkAction('Denied', Array.from(selectedEntryIds));
   }
 }
 
@@ -156,6 +205,49 @@ async function sendBulkAction(status) {
     alert('Bulk update failed');
   }
 }
+
+async function sendIndividualAction(taskId, status) {
+  try {
+    const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ status })
+    });
+
+    if (res.ok) {
+      await loadAdminSchedule();
+    } else {
+      alert('Failed to update status.');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function sendBulkAction(status, ids) {
+  if (!ids.length) {
+    alert('No entries selected.');
+    return;
+  }
+
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/bulk-update', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ ids, status })
+    });
+
+    const data = await res.json();
+    document.getElementById('bulkStatus').textContent = data.message || 'Updated';
+    await loadAdminSchedule();
+  } catch (err) {
+    console.error(err);
+    alert('Bulk action failed.');
+  }
+}
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
