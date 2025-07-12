@@ -242,6 +242,31 @@ async function sendIndividualAction(taskId, status) {
   }
 }
 
+async function loadAuditLog() {
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/audit-log', {
+      credentials: 'include'
+    });
+    const data = await res.json();
+    const tbody = document.querySelector('#audit-log-table tbody');
+    tbody.innerHTML = '';
+    data.forEach(entry => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.id}</td>
+        <td>${entry.admin_email || 'N/A'}</td>
+        <td>${entry.action}</td>
+        <td>${entry.service_type || '—'}</td>
+        <td>${entry.scheduled_date || '—'}</td>
+        <td>${new Date(entry.timestamp).toLocaleString()}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (err) {
+    alert('Failed to load audit log.');
+  }
+}
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
