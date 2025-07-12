@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     loadContacts();
     loadBusinessUsers();
+    await loadAuditLog();
     await loadAdminSchedule(); // 👈 New admin-specific calendar
 
   } catch (err) {
