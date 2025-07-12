@@ -279,7 +279,7 @@ async function renderCalendar() {
     document.getElementById('bulkApprove').onclick = () => sendBulkAction('Approved');
     document.getElementById('bulkDeny').onclick = () => sendBulkAction('Denied');
   }
-}
+
 
 function renderCalendarFallback() {
   const calendar = document.getElementById('calendar');
