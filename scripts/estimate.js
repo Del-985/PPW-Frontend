@@ -23,7 +23,7 @@ function calculateEstimate() {
 
   if (document.getElementById('lawn').checked) {
     let sqft = parseFloat(document.getElementById('lawnSqft').value) || 0;
-    let cost = Math.max(50, sqft * 0.1);
+    let cost = Math.max(50, sqft * 0.01);
     total += cost;
     breakdown.push("Lawn: $" + cost.toFixed(2));
   }
