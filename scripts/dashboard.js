@@ -147,13 +147,42 @@ async function renderCalendar() {
     dayBox.className = 'calendar-day';
     dayBox.innerHTML = `<span>${i}</span>`;
 
+    dayBox.addEventListener('click', async () => {
+      const serviceType = prompt('Service Type:');
+      if (!serviceType) return;
+
+      const scheduledTime = prompt('Scheduled Time (HH:MM):');
+      if (!scheduledTime) return;
+
+      const notes = prompt('Any notes?') || '';
+
+      const scheduledDate = `${year}-${monthPrefix}-${i.toString().padStart(2, '0')}`;
+
+      const createRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          service_type: serviceType,
+          scheduled_time: scheduledTime,
+          scheduled_date: scheduledDate,
+          notes: notes
+        })
+      });
+
+      if (createRes.ok) {
+        await renderCalendar();
+      } else {
+        alert('Failed to create entry.');
+      }
+    });
+
     if (taskMap[i]) {
       taskMap[i].forEach(task => {
         const note = document.createElement('div');
         note.style.fontSize = '12px';
         note.style.marginTop = '4px';
 
-        // ⬛ Bulk selection checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.style.marginRight = '4px';
@@ -164,17 +193,14 @@ async function renderCalendar() {
         });
         note.appendChild(checkbox);
 
-        // ⬛ Task label
         const label = document.createElement('span');
         label.textContent = `${task.service_type} @ ${task.scheduled_time} (${task.status})`;
         note.appendChild(label);
 
-        // ⬛ Status color
         if (task.status === 'Approved') note.style.color = 'green';
         else if (task.status === 'Denied') note.style.color = 'red';
         else note.style.color = 'orange';
 
-        // ⬛ Edit/Delete buttons
         const actions = document.createElement('div');
         actions.style.marginTop = '2px';
 
@@ -236,43 +262,10 @@ async function renderCalendar() {
       });
     }
 
-    // Inline scheduling
-    dayBox.addEventListener('click', async (e) => {
-  // Ignore if click target is a button or input
-  if (
-  e.target.closest('button') ||
-  e.target.closest('input') ||
-  e.target.closest('select') ||
-  e.target.closest('.calendar-control') // optional class name
-) {
-  return;
-}
-
-  const service_type = prompt(`Enter service type for ${month + 1}/${i}/${year}`);
-  if (service_type) {
-    const scheduled_date = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
-    const scheduled_time = '12:00';
-    const notes = '';
-
-    try {
-      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ service_type, scheduled_date, scheduled_time, notes })
-      });
-
-      if (res.ok) {
-        await renderCalendar();
-      }
-    } catch (err) {
-      console.error('Inline scheduling failed', err);
-    }
-  }
-});
-
     calendar.appendChild(dayBox);
   }
+}
+
 
   // ⬛ Bulk action control buttons (once)
   const bulkControls = document.getElementById('bulkControls');
