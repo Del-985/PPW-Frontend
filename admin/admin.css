@@ -136,7 +136,7 @@ button.delete {
 }
 .tab {
   padding: 8px 20px;
-  background: #fff;
+  background: ##222;
   color: #fff;
   border: none;
   border-radius: 10px 10px 0 0;
@@ -145,7 +145,7 @@ button.delete {
   transition: background 0.2s;
 }
 .tab.active {
-  background: #fff;
+  background: ##222;
   color: #fff;
 }
 .tab-panel {
