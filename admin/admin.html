@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="admin.css">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
-
   <title>Admin Dashboard</title>
 </head>
 <body>
@@ -16,37 +15,59 @@
     </nav>
   </header>
 
-  <h2>Contact Submissions</h2>
-  <table id="contacts-table">
-    <thead>
-      <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th><th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <main>
+    <!-- Tab Buttons -->
+    <div class="tab-container">
+      <button class="tab active" data-tab="contacts-panel">Contacts</button>
+      <button class="tab" data-tab="users-panel">Business Users</button>
+      <button class="tab" data-tab="audit-panel">Audit Log</button>
+      <button class="tab" data-tab="schedule-panel">Schedule</button>
+    </div>
 
-  <h2>Business Users</h2>
-  <table id="business-users-table">
-    <thead>
-      <tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <!-- Contacts Tab -->
+    <section id="contacts-panel" class="tab-panel active">
+      <h2>Contact Submissions</h2>
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Submitted At</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <h2>Audit Log</h2>
-<table id="audit-log-table">
-  <thead>
-    <tr>
-      <th>ID</th><th>Admin</th><th>Action</th><th>Service</th><th>Date</th><th>Timestamp</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+    <!-- Business Users Tab -->
+    <section id="users-panel" class="tab-panel">
+      <h2>Business Users</h2>
+      <table id="business-users-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <h2>Schedule Calendar</h2>
-  <div id="bulkControls" style="margin-top: 20px;"></div>
-  <div id="calendar" class="calendar-grid"></div>
+    <!-- Audit Log Tab -->
+    <section id="audit-panel" class="tab-panel">
+      <h2>Audit Log</h2>
+      <table id="audit-log-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Admin</th><th>Action</th><th>Service</th><th>Date</th><th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Schedule Tab -->
+    <section id="schedule-panel" class="tab-panel">
+      <h2>Schedule Calendar</h2>
+      <div id="bulkControls" style="margin-top: 20px;"></div>
+      <div id="calendar" class="calendar-grid"></div>
+    </section>
+  </main>
 
   <script src="../scripts/admin.js"></script>
 </body>
