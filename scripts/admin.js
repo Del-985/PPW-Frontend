@@ -364,50 +364,53 @@ async function loadInvoices() {
         <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : ''}</td>
         <td>${new Date(inv.created_at).toLocaleString()}</td>
         <td>${inv.paid ? 'Yes' : 'No'}</td>
+        <td>
+          ${inv.paid ? '' : `<button class="btn-paid" data-id="${inv.id}">Mark Paid</button>`}
+          <button class="btn-delete" data-id="${inv.id}">Delete</button>
+        </td>
       `;
       tbody.appendChild(row);
+    });
+
+    // Attach action handlers after DOM is updated
+    tbody.querySelectorAll('.btn-paid').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const id = this.dataset.id;
+        if (confirm('Mark this invoice as paid?')) {
+          const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}/paid`, {
+            method: 'PATCH',
+            credentials: 'include'
+          });
+          if (res.ok) {
+            await loadInvoices(); // Refresh table
+          } else {
+            alert('Failed to mark as paid');
+          }
+        }
+      });
+    });
+
+    tbody.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const id = this.dataset.id;
+        if (confirm('Delete this invoice? This cannot be undone.')) {
+          const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+          if (res.ok) {
+            await loadInvoices();
+          } else {
+            alert('Failed to delete invoice');
+          }
+        }
+      });
     });
   } catch (err) {
     console.error('Error loading invoices:', err);
     const tbody = document.querySelector('#invoice-table tbody');
-    if (tbody) tbody.innerHTML = `<tr><td colspan="8">Failed to load invoices</td></tr>`;
+    if (tbody) tbody.innerHTML = `<tr><td colspan="9">Failed to load invoices</td></tr>`;
   }
-
-  // After populating table...
-tbody.querySelectorAll('.btn-paid').forEach(btn => {
-  btn.addEventListener('click', async function () {
-    const id = this.dataset.id;
-    if (confirm('Mark this invoice as paid?')) {
-      const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}/paid`, {
-        method: 'PATCH',
-        credentials: 'include'
-      });
-      if (res.ok) {
-        await loadInvoices(); // Refresh table
-      } else {
-        alert('Failed to mark as paid');
-      }
-    }
-  });
-});
-
-tbody.querySelectorAll('.btn-delete').forEach(btn => {
-  btn.addEventListener('click', async function () {
-    const id = this.dataset.id;
-    if (confirm('Delete this invoice? This cannot be undone.')) {
-      const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-      if (res.ok) {
-        await loadInvoices();
-      } else {
-        alert('Failed to delete invoice');
-      }
-    }
-  });
-});
-
 }
 
 
