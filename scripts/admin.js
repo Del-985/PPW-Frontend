@@ -268,6 +268,27 @@ async function loadAuditLog() {
   }
 }
 
+// scripts/admin.js
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active from all tabs/panels
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      // Activate selected
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // TODO: Fetch and render data for each section as needed
+  // Example: fetchContacts(), fetchUsers(), fetchSchedule(), fetchAuditLog()
+});
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
