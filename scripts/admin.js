@@ -372,6 +372,42 @@ async function loadInvoices() {
     const tbody = document.querySelector('#invoice-table tbody');
     if (tbody) tbody.innerHTML = `<tr><td colspan="8">Failed to load invoices</td></tr>`;
   }
+
+  // After populating table...
+tbody.querySelectorAll('.btn-paid').forEach(btn => {
+  btn.addEventListener('click', async function () {
+    const id = this.dataset.id;
+    if (confirm('Mark this invoice as paid?')) {
+      const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}/paid`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+      if (res.ok) {
+        await loadInvoices(); // Refresh table
+      } else {
+        alert('Failed to mark as paid');
+      }
+    }
+  });
+});
+
+tbody.querySelectorAll('.btn-delete').forEach(btn => {
+  btn.addEventListener('click', async function () {
+    const id = this.dataset.id;
+    if (confirm('Delete this invoice? This cannot be undone.')) {
+      const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      if (res.ok) {
+        await loadInvoices();
+      } else {
+        alert('Failed to delete invoice');
+      }
+    }
+  });
+});
+
 }
 
 
