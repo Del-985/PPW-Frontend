@@ -358,15 +358,17 @@ async function loadInvoices() {
       row.innerHTML = `
         <td>${inv.id}</td>
         <td>${inv.customer_name}</td>
-        <td>${inv.business_user_id}</td>
+        <td>${inv.business_name || inv.business_user_id}</td>
         <td>$${Number(inv.amount).toFixed(2)}</td>
         <td>${inv.description || ''}</td>
         <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : ''}</td>
-        <td>${new Date(inv.created_at).toLocaleString()}</td>
+        <td>${inv.service_date ? new Date(inv.service_date).toLocaleDateString() : ''}</td>
         <td>${inv.paid ? 'Yes' : 'No'}</td>
         <td>
           ${inv.paid ? '' : `<button class="btn-paid" data-id="${inv.id}">Mark Paid</button>`}
           <button class="btn-delete" data-id="${inv.id}">Delete</button>
+          <a href="https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${inv.id}/pdf" 
+             target="_blank" rel="noopener" class="btn-download-pdf">PDF</a>
         </td>
       `;
       tbody.appendChild(row);
@@ -412,6 +414,7 @@ async function loadInvoices() {
     if (tbody) tbody.innerHTML = `<tr><td colspan="9">Failed to load invoices</td></tr>`;
   }
 }
+
 
 
 
