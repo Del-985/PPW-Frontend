@@ -362,8 +362,8 @@ async function loadInvoices() {
         <td>${inv.business_name || inv.business_user_id}</td>
         <td>$${Number(inv.amount).toFixed(2)}</td>
         <td>${inv.description || ''}</td>
-        <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : ''}</td>
-        <td>${inv.service_date ? new Date(inv.service_date).toLocaleDateString() : ''}</td>
+        <td>${inv.due_date ? inv.due_date : ''}</td>
+        <td>${inv.service_date ? inv.service_date : ''}</td>
         <td>${inv.paid ? 'Yes' : 'No'}</td>
         <td>
           ${inv.paid ? '' : `<button class="btn-paid" data-id="${inv.id}">Mark Paid</button>`}
