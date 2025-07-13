@@ -1,47 +1,110 @@
 PPW-Frontend/
+├── .gitattributes
 ├── CNAME
-├── index.html
-├── admin.html
 ├── estimate.html
+├── index.html
+├── package.json
 ├── portal.html
+├── structure.md
+├── admin/
+│   ├── admin.html
+│   └── admin.css
+├── business/
+│   ├── dashboard.html
+│   └── register.html
 ├── css/
 │   └── styles.css
 ├── scripts/
+│   ├── admin.js
 │   ├── contact.js
+│   ├── dashboard.js
+│   ├── estimate.js
 │   ├── login.js
 │   ├── register.js
-|   ├── dashboard.js
-├── business/
-│   └── register.html
+│   └── verifyforzoho.html
+└── zohoverify/
+    └── verifyforzoho.html
+
 
 
 # Repository Structure
 
-This document outlines the structure of the Pioneer Pressure Washing and Landscaping frontend repository.
+This document outlines the structure of the **Pioneer Pressure Washing and Landscaping frontend repository**.
 
-## Root Files
-- **CNAME** - Contains the domain name for the website.
+## Root-Level Files
+- **.gitattributes** – Git configuration file for handling line endings.
+- **CNAME** – Configures the custom domain (`pioneerwashandlandscape.com`) for GitHub Pages.
+- **index.html** – Landing page for the public site.
+- **estimate.html** – Public-facing page for customers to request free estimates.
+- **portal.html** – Business login portal.
+- **package.json** – (Present, though not commonly used with static sites) may be used for build or deployment tooling.
+- **structure.md** – This documentation file.
 
-## HTML Files
-- **index.html** - Main webpage containing sections like services, gallery, about, and contact.
-- **admin.html** - Admin dashboard for viewing contact submissions.
-- **portal.html** - Business portal for login and invoice creation.
-- **estimate.html** - Webpage for receiving free service estimates.
-- **business/register.html** - Registration page for businesses.
+---
 
-## CSS Files
-- **css/styles.css** - Stylesheet for the website layout and design.
+## HTML Pages
 
-## JavaScript Files
-- **scripts/login.js** - Handles login functionality.
-- **scripts/contact.js** - Manages the contact form submission.
-- **scripts/register.js** - Implements business registration functionality.
-- **scripts/estimate.js** - Calculates service estimates.
+### Public Pages
+- `index.html` – Main homepage with service info, gallery, and contact form.
+- `estimate.html` – Form to get an estimate on services.
 
-## Images
-- Not listed in the repository structure but referenced in `index.html` for the gallery and services sections.
+### Business Portal
+- `portal.html` – Business login interface.
+
+### Admin
+- `admin/admin.html` – Admin dashboard page.
+
+### Business
+- `business/register.html` – New business registration form.
+- `business/dashboard.html` – Authenticated business user dashboard.
+
+---
+
+## CSS
+
+- `css/styles.css` – Main sitewide stylesheet.
+- `admin/admin.css` – Custom styles for admin dashboard.
+
+---
+
+## JavaScript
+
+- `scripts/login.js` – Handles business login POST to backend.
+- `scripts/contact.js` – Submits contact form data to the backend.
+- `scripts/register.js` – Sends business registration data.
+- `scripts/estimate.js` – Estimate form calculation logic.
+- `scripts/dashboard.js` – Business dashboard interaction (task loading etc.).
+- `scripts/admin.js` – Admin dashboard interaction (contact listing etc.).
+- `scripts/verifyforzoho.html` – HTML file for Zoho domain verification (note: should likely be moved to `zohoverify/`).
+
+---
+
+## Miscellaneous
+
+### Zoho Domain Verification
+- `zohoverify/verifyforzoho.html` – Used to validate domain ownership with Zoho Mail (referenced in DNS or meta tag).
+
+---
+
+## API Dependencies
+
+Frontend interfaces with:
+https://pioneer-pressure-washing.onrender.com
+
+
+Key endpoints used include:
+- `POST /api/business/login`
+- `POST /api/business/register`
+- `POST /api/contact`
+- `GET /api/admin/contacts`
+- `GET /api/business/schedule`  
+(*and others depending on dashboard interaction scripts*)
+
+---
 
 ## Notes
-- The repository includes several API calls to `https://pioneer-pressure-washing.onrender.com` for functionalities like login, registration, contact submissions, and admin interactions.
 
-Feel free to copy and paste the above content into a new file named `structure.md` in your repository. Let me know if you need assistance with anything else!
+- The project is deployed via **GitHub Pages** (static frontend).
+- Backend API is deployed via **Render** (Node.js/Express).
+- Custom domain DNS managed through **DreamHost**.
+- Email functionality is handled via **Zoho SMTP** with domain verification.
