@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     loadBusinessUsers();
     await loadAuditLog();
     await loadAdminSchedule(); // 👈 New admin-specific calendar
+    await loadInvoices();
+
 
   } catch (err) {
     console.error('Auth check failed:', err);
