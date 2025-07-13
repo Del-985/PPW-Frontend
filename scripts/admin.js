@@ -342,6 +342,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+async function loadInvoices() {
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/invoices', {
+      credentials: 'include'
+    });
+    if (!res.ok) throw new Error('Failed to fetch invoices');
+    const invoices = await res.json();
+    const tbody = document.querySelector('#invoice-table tbody');
+    tbody.innerHTML = '';
+    invoices.forEach(inv => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${inv.id}</td>
+        <td>${inv.customer_name}</td>
+        <td>${inv.business_user_id}</td>
+        <td>$${Number(inv.amount).toFixed(2)}</td>
+        <td>${inv.description || ''}</td>
+        <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : ''}</td>
+        <td>${new Date(inv.created_at).toLocaleString()}</td>
+        <td>${inv.paid ? 'Yes' : 'No'}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (err) {
+    console.error('Error loading invoices:', err);
+    const tbody = document.querySelector('#invoice-table tbody');
+    if (tbody) tbody.innerHTML = `<tr><td colspan="8">Failed to load invoices</td></tr>`;
+  }
+}
+
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
