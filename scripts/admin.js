@@ -289,6 +289,59 @@ document.addEventListener('DOMContentLoaded', () => {
   // Example: fetchContacts(), fetchUsers(), fetchSchedule(), fetchAuditLog()
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  const invoiceForm = document.getElementById('invoice-form');
+  if (invoiceForm) {
+    invoiceForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // Build data from the form
+      const formData = new FormData(invoiceForm);
+      const data = {
+        customer_name: formData.get('customer_name'),
+        business_user_id: Number(formData.get('business_user_id')),
+        amount: Number(formData.get('amount')),
+        description: formData.get('description'),
+        due_date: formData.get('due_date')
+      };
+
+      // Optional: Frontend validation
+      if (!data.customer_name || !data.business_user_id || !data.amount) {
+        setInvoiceMsg('Please fill in all required fields.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/invoice', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          setInvoiceMsg('Invoice created successfully!');
+          invoiceForm.reset();
+        } else {
+          const err = await res.json();
+          setInvoiceMsg('Error: ' + (err.error || 'Failed to create invoice.'));
+        }
+      } catch (err) {
+        setInvoiceMsg('Network or server error.');
+      }
+    });
+  }
+
+  function setInvoiceMsg(msg) {
+    const msgDiv = document.getElementById('invoice-message');
+    if (msgDiv) {
+      msgDiv.textContent = msg;
+    }
+  }
+});
+
 
 function logout() {
   document.cookie = "token=; path=/; max-age=0;";
