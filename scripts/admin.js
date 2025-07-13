@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       try {
-        const res = await fetch('/api/admin/invoice', {
+        const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/invoice', {
           method: 'POST',
           credentials: 'include',
           headers: {
