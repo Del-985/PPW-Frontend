@@ -304,7 +304,8 @@ document.addEventListener('DOMContentLoaded', function() {
         business_user_id: Number(formData.get('business_user_id')),
         amount: Number(formData.get('amount')),
         description: formData.get('description'),
-        due_date: formData.get('due_date')
+        due_date: formData.get('due_date'),
+        service_date: formData.get('service_date')
       };
 
       // Optional: Frontend validation
