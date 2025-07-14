@@ -402,7 +402,7 @@ async function loadInvoices() {
     }
 
     container.innerHTML = `
-      <table>
+      <table class="invoices-table">
         <thead>
           <tr>
             <th>#</th>
@@ -416,11 +416,17 @@ async function loadInvoices() {
           ${invoices
             .map(inv => `
               <tr>
-                <td>${inv.id}</td>
-                <td>$${Number(inv.amount).toFixed(2)}</td>
+                <td>${1000 + Number(inv.id)}</td>
+                <td class="num">$${Number(inv.amount).toFixed(2)}</td>
                 <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : 'N/A'}</td>
-                <td>${inv.paid ? 'Paid' : 'Unpaid'}</td>
-                <td><a href="/api/admin/invoice/${inv.id}/pdf" target="_blank">PDF</a></td>
+                <td>
+                  <span class="badge ${inv.paid ? 'paid' : 'unpaid'}">
+                    ${inv.paid ? 'Paid' : 'Unpaid'}
+                  </span>
+                </td>
+                <td>
+                  <a class="btn-invoice-pdf" href="/api/business/me/invoice/${inv.id}/pdf" target="_blank">PDF</a>
+                </td>
               </tr>
             `)
             .join('')}
