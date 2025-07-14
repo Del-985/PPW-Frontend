@@ -141,3 +141,64 @@ body.admin td {
 .tab.active { background: #eee; font-weight: bold; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
+
+/* ---- Universal Tab Styles for Dashboards ---- */
+.tab-container {
+  display: flex;
+  gap: 0.5em;
+  background: var(--color-accent-light);
+  padding: 0.75em 1em 0.25em 1em;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 2px solid var(--color-accent);
+  margin-bottom: 0;
+  margin-top: 2em;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 0.5em 2em;
+  font-size: 1rem;
+  color: var(--color-primary);
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-weight: bold;
+  outline: none;
+  margin-right: 2px;
+  position: relative;
+  top: 2px;
+}
+
+.tab.active {
+  background: #fff;
+  color: var(--color-primary);
+  border: 2px solid var(--color-accent);
+  border-bottom: 2px solid #fff;
+  z-index: 1;
+}
+
+.tab:not(.active):hover {
+  background: #d9f2fb;
+  color: var(--color-primary);
+}
+
+.tab-panel {
+  display: none;
+  background: #fff;
+  border-radius: 0 0 8px 8px;
+  border: 2px solid var(--color-accent);
+  border-top: none;
+  padding: 2em 2em 1em 2em;
+  margin-bottom: 2em;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeInTab 0.2s;
+}
+
+@keyframes fadeInTab {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
