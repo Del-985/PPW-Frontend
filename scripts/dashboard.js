@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // 🎯 Tab-switcher setup (with calendar and invoices logic)
-    document.querySelectorAll('nav.dashboard-tabs .tab').forEach(btn => {
+    document.querySelectorAll('.tab-container .tab').forEach(btn => {
       btn.addEventListener('click', async () => {
         document.querySelectorAll('.tab-container .tab').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('main .tab-panel').forEach(panel => panel.classList.remove('active'));
@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     // ✅ Load initial content
-    setupScheduleForm();
-    loadContacts();
+    setupScheduleForm?.();
+    loadContacts?.();
 
     // Optionally pre-render calendar if Scheduling is the first tab
-    const activeTab = document.querySelector('nav.dashboard-tabs .tab.active');
+    const activeTab = document.querySelector('.tab-container .tab.active');
     if (activeTab && activeTab.dataset.tab === 'scheduling-panel') {
       const calParent = document.getElementById('calendar-container');
       if (calParent) {
