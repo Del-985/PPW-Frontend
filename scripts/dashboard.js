@@ -26,8 +26,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         const panel = document.getElementById(btn.dataset.tab);
         if (panel) panel.classList.add('active');
 
-        // 🗓 If scheduling tab clicked, render calendar
+        // 🗓 If scheduling tab clicked, reset and render calendar
         if (btn.dataset.tab === 'scheduling-panel') {
+          const calParent = document.getElementById('calendar-container');
+          if (calParent) {
+            calParent.innerHTML = '<div id="calendar"></div>';
+          }
           try {
             await renderCalendar();
           } catch (err) {
@@ -47,9 +51,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupScheduleForm();
     loadContacts();
 
-    // Optionally pre-render calendar if it's the first tab
+    // Optionally pre-render calendar if Scheduling is the first tab
     const activeTab = document.querySelector('nav.dashboard-tabs .tab.active');
     if (activeTab && activeTab.dataset.tab === 'scheduling-panel') {
+      const calParent = document.getElementById('calendar-container');
+      if (calParent) {
+        calParent.innerHTML = '<div id="calendar"></div>';
+      }
       try {
         await renderCalendar();
       } catch (err) {
