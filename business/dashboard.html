@@ -20,42 +20,33 @@
     <a href="../portal.html">Business Portal</a>
   </nav>
 
+  <!-- New Tab Navigation -->
   <nav class="dashboard-tabs" style="margin-top: 2rem;">
-    <button class="tab active" data-tab="schedule-panel">Schedule</button>
-    <button class="tab" data-tab="invoices-panel">Invoices</button>
-    <button class="tab" data-tab="messages-panel">Messages</button>
-    <button class="tab" data-tab="profile-panel">Profile</button>
+    <button class="tab active" data-tab="invoices-panel">Invoices</button>
+    <button class="tab" data-tab="scheduling-panel">Scheduling</button>
+    <button class="tab" data-tab="coming-soon-panel">Coming Soon</button>
   </nav>
 </header>
 
 <main class="container">
-
-  <section id="schedule-panel" class="tab-panel active">
-    <h2>Scheduled Tasks</h2>
-    <div id="calendar-container">
-      <div id="calendar"></div>
-    </div>
-  </section>
-
-  <section id="invoices-panel" class="tab-panel" style="display:none;">
+  <section id="invoices-panel" class="tab-panel active">
     <h2>Your Invoices</h2>
     <div id="invoice-list">
       <p>Loading invoices...</p>
     </div>
   </section>
 
-  <section id="messages-panel" class="tab-panel" style="display:none;">
-    <h2>Messages</h2>
-    <p>Messaging feature coming soon.</p>
-  </section>
-
-  <section id="profile-panel" class="tab-panel" style="display:none;">
-    <h2>Your Profile</h2>
-    <div id="profile-info">
-      <p>Loading profile...</p>
+  <section id="scheduling-panel" class="tab-panel" style="display:none;">
+    <h2>Scheduling</h2>
+    <div id="calendar-container">
+      <div id="calendar"></div>
     </div>
   </section>
 
+  <section id="coming-soon-panel" class="tab-panel" style="display:none;">
+    <h2>Coming Soon</h2>
+    <p>This section will be available soon!</p>
+  </section>
 </main>
 
 <footer class="footer">
