@@ -136,3 +136,8 @@ body.admin td {
   display: block;
   margin-bottom: 6px;
 }
+
+.tab { padding: 0.5em 1em; cursor: pointer; }
+.tab.active { background: #eee; font-weight: bold; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
