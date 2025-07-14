@@ -5,43 +5,52 @@ document.addEventListener('DOMContentLoaded', async function () {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
       credentials: 'include'
     });
-
     if (!res.ok) throw new Error('Unauthorized');
-
     const user = await res.json();
     console.log('[DEBUG] Logged in user:', user);
 
     const isAdminPage = window.location.pathname.includes('admin.html');
-
     if (isAdminPage && !user.is_admin) {
       alert('Access denied. Admins only.');
       location.replace('/portal.html');
       return;
     }
 
-    // 🎯 Tab-switcher setup
+    // 🎯 Tab-switcher setup (with calendar fix)
     document.querySelectorAll('nav.dashboard-tabs .tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Switch active tab
+      btn.addEventListener('click', async () => {
         document.querySelectorAll('nav.dashboard-tabs .tab').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('main .tab-panel').forEach(panel => panel.classList.remove('active'));
 
         btn.classList.add('active');
         const panel = document.getElementById(btn.dataset.tab);
         if (panel) panel.classList.add('active');
+
+        // 🗓 If scheduling tab clicked, render calendar
+        if (btn.dataset.tab === 'scheduling-panel') {
+          try {
+            await renderCalendar();
+          } catch (err) {
+            console.error('Calendar rendering failed on tab switch:', err);
+            renderCalendarFallback();
+          }
+        }
       });
     });
 
-    // ✅ Proceed with loading dashboard content
+    // ✅ Load initial content
     setupScheduleForm();
     loadContacts();
 
-    // Render calendar (with fallback handling)
-    try {
-      await renderCalendar();
-    } catch (err) {
-      console.error('Calendar rendering failed:', err);
-      renderCalendarFallback();
+    // Optionally pre-render calendar if it's the first tab
+    const activeTab = document.querySelector('nav.dashboard-tabs .tab.active');
+    if (activeTab && activeTab.dataset.tab === 'scheduling-panel') {
+      try {
+        await renderCalendar();
+      } catch (err) {
+        console.error('Initial calendar rendering failed:', err);
+        renderCalendarFallback();
+      }
     }
 
   } catch (err) {
@@ -49,6 +58,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     location.replace('/portal.html');
   }
 });
+
+
 function setupScheduleForm() {
   const scheduleForm = document.getElementById('schedule-form');
   if (scheduleForm) {
