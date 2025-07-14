@@ -488,6 +488,8 @@ async function loadExpenses(year = "") {
     console.error('Error loading expenses:', err);
     const tbody = expensesTable.querySelector('tbody');
     if (tbody) tbody.innerHTML = `<tr><td colspan="6">Failed to load expenses</td></tr>`;
+    let totalElem = document.getElementById('expenses-total')
+    if (totalElem) totalElem.textContent = '';
   }
 }
 
