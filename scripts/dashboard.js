@@ -387,7 +387,7 @@ async function sendBulkAction(status) {
 
 async function loadInvoices() {
   try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/invoices', {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/me/invoices', {
       credentials: 'include'
     });
     if (!res.ok) throw new Error('Failed to fetch invoices');
