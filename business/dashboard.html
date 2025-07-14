@@ -19,16 +19,17 @@
     <a href="../estimate.html">Free Estimate</a>
     <a href="../portal.html">Business Portal</a>
   </nav>
-
-  <!-- New Tab Navigation (Scheduling is first & active) -->
-  <nav class="dashboard-tabs" style="margin-top: 2rem;">
-    <button class="tab active" data-tab="scheduling-panel">Scheduling</button>
-    <button class="tab" data-tab="invoices-panel">Invoices</button>
-    <button class="tab" data-tab="coming-soon-panel">Coming Soon</button>
-  </nav>
 </header>
 
 <main class="container">
+  <!-- Tab Buttons styled like admin -->
+  <div class="tab-container">
+    <button class="tab active" data-tab="scheduling-panel">Scheduling</button>
+    <button class="tab" data-tab="invoices-panel">Invoices</button>
+    <button class="tab" data-tab="coming-soon-panel">Coming Soon</button>
+  </div>
+
+  <!-- Scheduling Tab -->
   <section id="scheduling-panel" class="tab-panel active">
     <h2>Scheduling</h2>
     <div id="calendar-container">
@@ -36,6 +37,7 @@
     </div>
   </section>
 
+  <!-- Invoices Tab -->
   <section id="invoices-panel" class="tab-panel">
     <h2>Your Invoices</h2>
     <div id="invoice-list">
@@ -43,6 +45,7 @@
     </div>
   </section>
 
+  <!-- Coming Soon Tab -->
   <section id="coming-soon-panel" class="tab-panel">
     <h2>Coming Soon</h2>
     <p>This section will be available soon!</p>
