@@ -454,6 +454,19 @@ async function loadExpenses(year = "") {
       tbody.appendChild(row);
     });
 
+   const total = expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+    let totalElem = document.getElementById('expenses-total');
+    if (!totalElem) {
+      totalElem = document.createElement('span');
+      totalElem.id = 'expenses-total';
+      totalElem.style.marginLeft = '2em';
+      totalElem.style.fontWeight = 'bold';
+      // Insert after Add Expense button
+      const addExpenseBtn = document.getElementById('add-expense-btn');
+      if (addExpenseBtn) addExpenseBtn.parentNode.insertBefore(totalElem, addExpenseBtn.nextSibling);
+    }
+    totalElem.textContent = `Total: $${total.toFixed(2)}`;
+
     // Attach edit event
     tbody.querySelectorAll('.btn-edit-expense').forEach(btn => {
       btn.addEventListener('click', function () {
