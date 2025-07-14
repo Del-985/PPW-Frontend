@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     loadContacts();
     loadBusinessUsers();
+    loadExpenses();
     await loadAuditLog();
     await loadAdminSchedule(); // 👈 New admin-specific calendar
     await loadInvoices();
@@ -416,6 +417,128 @@ async function loadInvoices() {
   }
 }
 
+// === EXPENSES ===
+
+// Elements
+const expensesPanel = document.getElementById('expenses-panel');
+const expensesTable = document.getElementById('expenses-table');
+const addExpenseBtn = document.getElementById('add-expense-btn');
+const expenseModal = document.getElementById('expense-modal');
+const closeExpenseModal = document.getElementById('close-expense-modal');
+const expenseForm = document.getElementById('expense-form');
+const expenseModalTitle = document.getElementById('expense-modal-title');
+
+let editingExpenseId = null;
+
+async function loadExpenses(year = "") {
+  try {
+    let url = 'https://pioneer-pressure-washing.onrender.com/api/admin/expenses';
+    if (year) url += `?year=${year}`;
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to fetch expenses');
+    const expenses = await res.json();
+    const tbody = expensesTable.querySelector('tbody');
+    tbody.innerHTML = '';
+    expenses.forEach(exp => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${exp.id}</td>
+        <td>${exp.date ? exp.date.slice(0,10) : ''}</td>
+        <td>${exp.category}</td>
+        <td>${exp.description || ''}</td>
+        <td>$${Number(exp.amount).toFixed(2)}</td>
+        <td>
+          <button class="btn-edit-expense" data-id="${exp.id}">Edit</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    // Attach edit event
+    tbody.querySelectorAll('.btn-edit-expense').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const expense = expenses.find(e => e.id == id);
+        if (!expense) return;
+        editingExpenseId = expense.id;
+        expenseModalTitle.textContent = 'Edit Expense';
+        expenseForm.elements['id'].value = expense.id;
+        expenseForm.elements['date'].value = expense.date;
+        expenseForm.elements['category'].value = expense.category;
+        expenseForm.elements['description'].value = expense.description || '';
+        expenseForm.elements['amount'].value = expense.amount;
+        showExpenseModal();
+      });
+    });
+
+  } catch (err) {
+    console.error('Error loading expenses:', err);
+    const tbody = expensesTable.querySelector('tbody');
+    if (tbody) tbody.innerHTML = `<tr><td colspan="6">Failed to load expenses</td></tr>`;
+  }
+}
+
+function showExpenseModal() {
+  expenseModal.style.display = 'block';
+}
+function hideExpenseModal() {
+  expenseModal.style.display = 'none';
+  expenseForm.reset();
+  editingExpenseId = null;
+  expenseModalTitle.textContent = 'Add Expense';
+}
+
+// Modal close
+if (closeExpenseModal) {
+  closeExpenseModal.onclick = hideExpenseModal;
+}
+window.onclick = function(event) {
+  if (event.target === expenseModal) hideExpenseModal();
+}
+
+// Add Expense button
+if (addExpenseBtn) {
+  addExpenseBtn.onclick = function() {
+    editingExpenseId = null;
+    expenseForm.reset();
+    expenseModalTitle.textContent = 'Add Expense';
+    showExpenseModal();
+  };
+}
+
+// Expense form submit
+if (expenseForm) {
+  expenseForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const data = {
+      date: expenseForm.elements['date'].value,
+      category: expenseForm.elements['category'].value,
+      description: expenseForm.elements['description'].value,
+      amount: expenseForm.elements['amount'].value
+    };
+    let url = 'https://pioneer-pressure-washing.onrender.com/api/admin/expenses';
+    let method = 'POST';
+    if (editingExpenseId) {
+      url += `/${editingExpenseId}`;
+      method = 'PATCH';
+    }
+    try {
+      const res = await fetch(url, {
+        method,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Failed to save expense');
+      hideExpenseModal();
+      await loadExpenses();
+    } catch (err) {
+      alert('Error saving expense: ' + err.message);
+    }
+  };
+}
+
+// === END EXPENSES ===
 
 
 
