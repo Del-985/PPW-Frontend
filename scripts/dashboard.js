@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (!res.ok) throw new Error('Unauthorized');
 
     const user = await res.json();
-   console.log('[DEBUG] Logged in user:', user);
+    console.log('[DEBUG] Logged in user:', user);
 
     const isAdminPage = window.location.pathname.includes('admin.html');
 
@@ -19,10 +19,24 @@ document.addEventListener('DOMContentLoaded', async function () {
       return;
     }
 
+    // 🎯 Tab-switcher setup
+    document.querySelectorAll('nav.dashboard-tabs .tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Switch active tab
+        document.querySelectorAll('nav.dashboard-tabs .tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('main .tab-panel').forEach(panel => panel.classList.remove('active'));
+
+        btn.classList.add('active');
+        const panel = document.getElementById(btn.dataset.tab);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
     // ✅ Proceed with loading dashboard content
     setupScheduleForm();
     loadContacts();
 
+    // Render calendar (with fallback handling)
     try {
       await renderCalendar();
     } catch (err) {
@@ -35,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     location.replace('/portal.html');
   }
 });
-
 function setupScheduleForm() {
   const scheduleForm = document.getElementById('schedule-form');
   if (scheduleForm) {
