@@ -1,4 +1,4 @@
- let selectedEntryIds = new Set();
+   let selectedEntryIds = new Set();
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
@@ -425,7 +425,7 @@ async function loadInvoices() {
                   </span>
                 </td>
                 <td>
-                  <a class="btn-invoice-pdf" href="/api/business/me/invoice/${inv.id}/pdf" target="_blank">PDF</a>
+                  <a class="btn-invoice-pdf" href="https://pioneer-pressure-washing.onrender.com/api/business/me/invoice/${inv.id}/pdf" target="_blank">PDF</a>
                 </td>
               </tr>
             `)
