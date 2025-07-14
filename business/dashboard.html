@@ -19,34 +19,43 @@
     <a href="../estimate.html">Free Estimate</a>
     <a href="../portal.html">Business Portal</a>
   </nav>
+
+  <nav class="dashboard-tabs" style="margin-top: 2rem;">
+    <button class="tab active" data-tab="schedule-panel">Schedule</button>
+    <button class="tab" data-tab="invoices-panel">Invoices</button>
+    <button class="tab" data-tab="messages-panel">Messages</button>
+    <button class="tab" data-tab="profile-panel">Profile</button>
+  </nav>
 </header>
 
 <main class="container">
-  <h2>Business Dashboard</h2>
-  <p>Welcome! You’ve successfully logged in.</p>
 
-  <section style="margin-top: 3rem;">
-    <h3>Scheduled Tasks</h3>
+  <section id="schedule-panel" class="tab-panel active">
+    <h2>Scheduled Tasks</h2>
     <div id="calendar-container">
       <div id="calendar"></div>
     </div>
   </section>
 
-  <section style="margin-top: 2rem;">
-    <h3>Tools</h3>
-    <ul>
-      <li><a href="#">View Invoices (coming soon)</a></li>
-      <li><a href="#">Manage Submissions (coming soon)</a></li>
-      <li><a href="#">Send Estimates (coming soon)</a></li>
-    </ul>
-  </section>
-
-  <section style="margin-top: 3rem;">
-    <h3>Recent Contact Submissions</h3>
-    <div id="contacts">
-      <p>Loading contacts...</p>
+  <section id="invoices-panel" class="tab-panel" style="display:none;">
+    <h2>Your Invoices</h2>
+    <div id="invoice-list">
+      <p>Loading invoices...</p>
     </div>
   </section>
+
+  <section id="messages-panel" class="tab-panel" style="display:none;">
+    <h2>Messages</h2>
+    <p>Messaging feature coming soon.</p>
+  </section>
+
+  <section id="profile-panel" class="tab-panel" style="display:none;">
+    <h2>Your Profile</h2>
+    <div id="profile-info">
+      <p>Loading profile...</p>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer">
