@@ -193,6 +193,69 @@ body.admin td {
   animation: fadeInTab 0.2s;
 }
 
+.invoices-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,40,100,0.04);
+}
+
+.invoices-table th {
+  background: var(--color-primary);
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding: 10px 8px;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.invoices-table td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 15px;
+}
+
+.invoices-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+.invoices-table tr:hover {
+  background: #eaf4fc;
+}
+
+.invoices-table td.num {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+}
+.badge.paid { background: #43b35c; }
+.badge.unpaid { background: #e64545; }
+
+.btn-invoice-pdf {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 15px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-invoice-pdf:hover {
+  background: #009fdd;
+}
+
 @keyframes fadeInTab {
   from { opacity: 0; }
   to   { opacity: 1; }
