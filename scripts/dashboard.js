@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       return;
     }
 
-    // 🎯 Tab-switcher setup (with calendar fix)
+    // 🎯 Tab-switcher setup (with calendar and invoices logic)
     document.querySelectorAll('nav.dashboard-tabs .tab').forEach(btn => {
       btn.addEventListener('click', async () => {
         document.querySelectorAll('nav.dashboard-tabs .tab').forEach(b => b.classList.remove('active'));
@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             renderCalendarFallback();
           }
         }
+
+        // 🧾 If invoices tab clicked, load invoices
+        if (btn.dataset.tab === 'invoices-panel') {
+          loadInvoices();
+        }
       });
     });
 
@@ -51,6 +56,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Initial calendar rendering failed:', err);
         renderCalendarFallback();
       }
+    }
+    // Optionally load invoices if Invoices is the first tab
+    if (activeTab && activeTab.dataset.tab === 'invoices-panel') {
+      loadInvoices();
     }
 
   } catch (err) {
@@ -365,6 +374,56 @@ async function sendBulkAction(status) {
   } catch (err) {
     console.error('Bulk action error:', err);
     document.getElementById('bulkStatus').textContent = 'Error';
+  }
+}
+
+async function loadInvoices() {
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me/invoices', {
+      credentials: 'include'
+    });
+    if (!res.ok) throw new Error('Failed to fetch invoices');
+
+    const invoices = await res.json();
+    const container = document.getElementById('invoice-list');
+    if (!container) return;
+
+    if (invoices.length === 0) {
+      container.innerHTML = '<p>No invoices found.</p>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${invoices
+            .map(inv => `
+              <tr>
+                <td>${inv.id}</td>
+                <td>$${Number(inv.amount).toFixed(2)}</td>
+                <td>${inv.due_date ? new Date(inv.due_date).toLocaleDateString() : 'N/A'}</td>
+                <td>${inv.paid ? 'Paid' : 'Unpaid'}</td>
+                <td><a href="/api/admin/invoice/${inv.id}/pdf" target="_blank">PDF</a></td>
+              </tr>
+            `)
+            .join('')}
+        </tbody>
+      </table>`;
+  } catch (err) {
+    console.error('Error loading invoices:', err);
+    const container = document.getElementById('invoice-list');
+    if (container) {
+      container.innerHTML = '<p style="color:red;">Failed to load invoices.</p>';
+    }
   }
 }
 
