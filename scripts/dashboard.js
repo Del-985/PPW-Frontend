@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // 🎯 Tab-switcher setup (with calendar and invoices logic)
     document.querySelectorAll('nav.dashboard-tabs .tab').forEach(btn => {
       btn.addEventListener('click', async () => {
-        document.querySelectorAll('nav.dashboard-tabs .tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-container .tab').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('main .tab-panel').forEach(panel => panel.classList.remove('active'));
 
         btn.classList.add('active');
