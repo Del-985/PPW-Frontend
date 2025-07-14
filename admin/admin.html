@@ -22,8 +22,8 @@
       <button class="tab" data-tab="users-panel">Business Users</button>
       <button class="tab" data-tab="audit-panel">Audit Log</button>
       <button class="tab" data-tab="schedule-panel">Schedule</button>
-      <!-- NEW TAB BUTTON -->
       <button class="tab" data-tab="invoices-panel">Invoices</button>
+      <button class="tab" data-tab="expenses-panel">Yearly Expenses</button>
     </div>
 
     <!-- Contacts Tab -->
@@ -70,7 +70,7 @@
       <div id="calendar" class="calendar-grid"></div>
     </section>
 
-    <!-- INVOICES TAB: NEW -->
+    <!-- INVOICES TAB -->
     <section id="invoices-panel" class="tab-panel">
       <h2>Create New Invoice</h2>
       <form id="invoice-form" style="max-width: 400px;">
@@ -108,7 +108,6 @@
       </form>
       <div id="invoice-message" style="margin-top: 1em; color: green;"></div>
 
-      <!-- INVOICE TABLE: UPDATED -->
       <h3>All Invoices</h3>
       <table id="invoice-table">
         <thead>
@@ -127,7 +126,49 @@
         <tbody></tbody>
       </table>
     </section>
-    <!-- END INVOICES TAB -->
+
+    <!-- EXPENSES TAB: NEW -->
+    <section id="expenses-panel" class="tab-panel">
+      <h2>Yearly Expenses</h2>
+      <button id="add-expense-btn" type="button">Add Expense</button>
+      <table id="expenses-table" style="margin-top:1em;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <!-- Modal for add/edit expense -->
+      <div id="expense-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+          <span class="close" id="close-expense-modal">&times;</span>
+          <h3 id="expense-modal-title">Add Expense</h3>
+          <form id="expense-form">
+            <input type="hidden" name="id" />
+            <label>
+              Date: <input type="date" name="date" required />
+            </label><br>
+            <label>
+              Category: <input type="text" name="category" required />
+            </label><br>
+            <label>
+              Description: <input type="text" name="description" />
+            </label><br>
+            <label>
+              Amount: <input type="number" name="amount" step="0.01" required />
+            </label><br>
+            <button type="submit" id="save-expense-btn">Save Expense</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- END EXPENSES TAB -->
 
   </main>
 
