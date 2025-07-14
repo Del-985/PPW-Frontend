@@ -538,6 +538,37 @@ if (expenseForm) {
   };
 }
 
+async function loadExpenses(year = "") {
+  try {
+    let url = 'https://pioneer-pressure-washing.onrender.com/api/admin/expenses';
+    if (year) url += `?year=${year}`;
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to fetch expenses');
+    const expenses = await res.json();
+    const tbody = expensesTable.querySelector('tbody');
+    tbody.innerHTML = '';
+    expenses.forEach(exp => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${exp.id}</td>
+        <td>${exp.date ? exp.date.slice(0,10) : ''}</td>
+        <td>${exp.category}</td>
+        <td>${exp.description || ''}</td>
+        <td>$${Number(exp.amount).toFixed(2)}</td>
+        <td>
+          <button class="btn-edit-expense" data-id="${exp.id}">Edit</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    // NEW: Calculate and display total
+    const total = expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+    document.getElementById('expenses-total').textContent =
+      `Total: $${total.toFixed(2)}`;
+
+    // (Rest of your edit handlers below...)
+
 // === END EXPENSES ===
 
 
