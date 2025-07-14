@@ -137,11 +137,6 @@ body.admin td {
   margin-bottom: 6px;
 }
 
-.tab { padding: 0.5em 1em; cursor: pointer; }
-.tab.active { background: #eee; font-weight: bold; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
 /* ---- Universal Tab Styles for Dashboards ---- */
 .tab-container {
   display: flex;
