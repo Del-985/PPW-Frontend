@@ -24,6 +24,7 @@
       <button class="tab" data-tab="schedule-panel">Schedule</button>
       <button class="tab" data-tab="invoices-panel">Invoices</button>
       <button class="tab" data-tab="expenses-panel">Yearly Expenses</button>
+      <button class="tab" data-tab="forms-panel">Forms</button> <!-- NEW TAB -->
     </div>
 
     <!-- Contacts Tab -->
@@ -130,8 +131,8 @@
     <!-- EXPENSES TAB: NEW -->
     <section id="expenses-panel" class="tab-panel">
       <h2>Yearly Expenses</h2>
-     <button id="add-expense-btn" type="button">Add Expense</button>
-     <span id="expenses-total" style="margin-left:2em; font-weight:bold;"></span>
+      <button id="add-expense-btn" type="button">Add Expense</button>
+      <span id="expenses-total" style="margin-left:2em; font-weight:bold;"></span>
       <table id="expenses-table" style="margin-top:1em;">
         <thead>
           <tr>
@@ -169,7 +170,27 @@
         </div>
       </div>
     </section>
-    <!-- END EXPENSES TAB -->
+
+    <!-- FORMS TAB: NEW -->
+    <section id="forms-panel" class="tab-panel">
+      <h2>Forms</h2>
+      <table id="forms-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Form Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Service Agreement</td>
+            <td><button class="btn-create-form" data-form="service-agreement">Create</button></td>
+          </tr>
+          <!-- More form rows can be added here -->
+        </tbody>
+      </table>
+    </section>
+    <!-- END FORMS TAB -->
 
   </main>
 
