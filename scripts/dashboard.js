@@ -157,15 +157,32 @@ function loadContacts() {
 let calendarMonth = new Date().getMonth();
 let calendarYear = new Date().getFullYear();
 
-async function renderCalendar() {
+// Global state variables to prevent duplicate calendar generation
+let lastRenderedYear = null;
+let lastRenderedMonth = null;
+
+async function renderCalendar(force = false) {
   const calendar = document.getElementById('calendar');
   const title = document.getElementById('calendar-title');
   if (!calendar || !title) return;
-  calendar.innerHTML = '';
 
   // Setup date logic for chosen month/year
   const year = calendarYear;
   const month = calendarMonth;
+
+  // Prevent re-render unless month/year changes or force=true
+  if (
+    !force &&
+    lastRenderedYear === year &&
+    lastRenderedMonth === month
+  ) {
+    return;
+  }
+  lastRenderedYear = year;
+  lastRenderedMonth = month;
+
+  calendar.innerHTML = '';
+
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   // Month title
@@ -256,7 +273,7 @@ async function renderCalendar() {
       });
 
       if (createRes.ok) {
-        await renderCalendar();
+        await renderCalendar(true); // Force refresh after creation
       } else {
         alert('Failed to create entry.');
       }
@@ -315,7 +332,7 @@ async function renderCalendar() {
           });
 
           if (updateRes.ok) {
-            await renderCalendar();
+            await renderCalendar(true); // Force refresh
           } else {
             alert('Failed to update.');
           }
@@ -334,7 +351,7 @@ async function renderCalendar() {
           });
 
           if (delRes.ok) {
-            await renderCalendar();
+            await renderCalendar(true); // Force refresh
           } else {
             alert('Failed to delete.');
           }
