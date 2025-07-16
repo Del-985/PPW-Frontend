@@ -246,6 +246,24 @@ async function sendIndividualAction(taskId, status) {
   }
 }
 
+document.getElementById('prev-month').onclick = () => {
+  calendarMonth--;
+  if (calendarMonth < 0) {
+    calendarMonth = 11;
+    calendarYear--;
+  }
+  renderCalendar();
+};
+document.getElementById('next-month').onclick = () => {
+  calendarMonth++;
+  if (calendarMonth > 11) {
+    calendarMonth = 0;
+    calendarYear++;
+  }
+  renderCalendar();
+};
+
+
 async function loadAuditLog() {
   try {
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/audit-log', {
