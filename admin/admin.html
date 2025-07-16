@@ -66,10 +66,17 @@
 
     <!-- Schedule Tab -->
     <section id="schedule-panel" class="tab-panel">
-      <h2>Schedule Calendar</h2>
-      <div id="bulkControls" style="margin-top: 20px;"></div>
-      <div id="calendar" class="calendar-grid"></div>
-    </section>
+  <h2>Schedule Calendar</h2>
+  <div id="calendar-controls" style="margin-bottom: 1em;">
+    <button id="prev-month">&lt;</button>
+    <span id="calendar-title"></span>
+    <button id="next-month">&gt;</button>
+    <!-- Bulk controls can be placed here or below -->
+  </div>
+  <div id="bulkControls" style="margin-bottom: 1em;"></div>
+  <div id="calendar" class="calendar-grid"></div>
+</section>
+
 
     <!-- INVOICES TAB -->
     <section id="invoices-panel" class="tab-panel">
