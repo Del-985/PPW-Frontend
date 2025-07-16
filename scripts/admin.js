@@ -93,38 +93,83 @@ async function deleteBusinessUser(id) {
   loadBusinessUsers();
 }
 
+let calendarMonth = new Date().getMonth();
+let calendarYear = new Date().getFullYear();
+
 async function loadAdminSchedule() {
   const calendar = document.getElementById('calendar');
-  if (!calendar) return;
+  const title = document.getElementById('calendar-title');
+  if (!calendar || !title) return;
   calendar.innerHTML = '';
 
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  // Use stateful month/year (NOT always current)
+  const year = calendarYear;
+  const month = calendarMonth;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule', {
-    credentials: 'include'
+  // Month title
+  title.textContent = new Date(year, month, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  // Day names header
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  days.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'calendar-header';
+    div.textContent = d;
+    calendar.appendChild(div);
   });
 
-  const data = await res.json();
-  const taskMap = {};
+  // Get which day of week the 1st is
+  const startDay = new Date(year, month, 1).getDay();
 
+  // Build up your task map just like before
+  const taskMap = {};
+  let data = [];
+  try {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule', {
+      credentials: 'include'
+    });
+    data = await res.json();
+    if (!Array.isArray(data)) throw new Error('Invalid schedule response');
+  } catch (err) {
+    // fail silently or show error
+  }
+
+  // Use the month/year being rendered
   const monthPrefix = (month + 1).toString().padStart(2, '0');
   const currentMonth = `${year}-${monthPrefix}`;
 
   data.forEach(task => {
     const dateStr = task.scheduled_date;
-    if (dateStr.startsWith(currentMonth)) {
+    if (dateStr?.startsWith(currentMonth)) {
       const day = parseInt(dateStr.split('-')[2], 10);
       if (!taskMap[day]) taskMap[day] = [];
       taskMap[day].push(task);
     }
   });
 
+  // Fill in blank days before the first
+  for (let i = 0; i < startDay; i++) {
+    const div = document.createElement('div');
+    div.className = 'calendar-day';
+    calendar.appendChild(div);
+  }
+
+  // Days of the month
   for (let i = 1; i <= daysInMonth; i++) {
     const dayBox = document.createElement('div');
     dayBox.className = 'calendar-day';
+
+    // Highlight today
+    const today = new Date();
+    if (
+      i === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear()
+    ) {
+      dayBox.classList.add('today');
+    }
+
     dayBox.innerHTML = `<span>${i}</span>`;
 
     if (taskMap[i]) {
@@ -141,6 +186,7 @@ async function loadAdminSchedule() {
         checkbox.addEventListener('change', () => {
           if (checkbox.checked) selectedEntryIds.add(task.id);
           else selectedEntryIds.delete(task.id);
+          renderBulkControls(); // Update bulk controls state
         });
         note.appendChild(checkbox);
 
@@ -178,6 +224,11 @@ async function loadAdminSchedule() {
 
     calendar.appendChild(dayBox);
   }
+
+  // Render bulk controls
+  if (typeof renderBulkControls === 'function') renderBulkControls();
+}
+
 
   // Bulk action buttons
   const bulkDiv = document.getElementById('bulkControls');
