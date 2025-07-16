@@ -244,7 +244,7 @@ async function loadAdminSchedule() {
     document.getElementById('bulkDeny').onclick = () =>
       sendBulkAction('Denied', Array.from(selectedEntryIds));
   }
-}
+
 
 // Bulk approval/denial
 async function sendBulkAction(status) {
