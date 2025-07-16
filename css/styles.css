@@ -256,6 +256,19 @@ body.admin td {
   background: #009fdd;
 }
 
+#calendar-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
+  gap: 1em;
+}
+
+#calendar-title {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
 @keyframes fadeInTab {
   from { opacity: 0; }
   to   { opacity: 1; }
