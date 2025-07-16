@@ -297,22 +297,23 @@ async function sendIndividualAction(taskId, status) {
   }
 }
 
-document.getElementById('prev-month').onclick = () => {
+document.getElementById('prev-month').onclick = async () => {
   calendarMonth--;
   if (calendarMonth < 0) {
     calendarMonth = 11;
     calendarYear--;
   }
-  renderCalendar();
+  await loadAdminSchedule();
 };
-document.getElementById('next-month').onclick = () => {
+document.getElementById('next-month').onclick = async () => {
   calendarMonth++;
   if (calendarMonth > 11) {
     calendarMonth = 0;
     calendarYear++;
   }
-  renderCalendar();
+  await loadAdminSchedule();
 };
+
 
 
 async function loadAuditLog() {
