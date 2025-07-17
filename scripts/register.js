@@ -7,10 +7,13 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
   const responseBox = document.getElementById('registerResponse');
 
   try {
-    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/register', {
+    const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ business_name, email, password })
+    });
+
     });
 
     let data;
