@@ -541,7 +541,7 @@ async function loadInvoices() {
   }
 }
 
-function logout() {
+async function logout() {
   await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/logout', {
   method: 'POST',
   credentials: 'include'
