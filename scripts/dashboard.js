@@ -542,6 +542,10 @@ async function loadInvoices() {
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.href = '/';
+  await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/logout', {
+  method: 'POST',
+  credentials: 'include'
+   });
+   window.location.replace('/portal.html'); // or login page
+
 }
