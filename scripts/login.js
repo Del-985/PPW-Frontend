@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const responseBox = document.getElementById('loginResponse');
 
     try {
-      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
+     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',   // crucial!
+      body: JSON.stringify({ email, password })
+      });
+
       });
 
       const data = await res.json();
