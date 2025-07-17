@@ -371,6 +371,85 @@ body.admin td {
   }
 }
 
+.quote-page {
+  max-width: 700px;
+  margin: 2.5rem auto 1rem auto;
+  background: #f8fafc;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(40,60,90,0.08);
+}
+
+.quote-intro {
+  margin-bottom: 2rem;
+}
+.quote-intro h2 {
+  color: #1b2940;
+  font-size: 2rem;
+  margin-bottom: 0.3em;
+}
+.quote-intro p {
+  color: #30497b;
+  font-size: 1.15rem;
+}
+
+.quote-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="tel"],
+.form-row input[type="file"],
+.form-row textarea {
+  flex: 1 1 200px;
+  padding: 0.6rem;
+  border: 1px solid #bdd6fa;
+  border-radius: 8px;
+  font-size: 1.04rem;
+  margin-bottom: 0;
+  background: #fff;
+}
+
+.form-row textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+.btn-primary {
+  background: #38b6ff;
+  color: #1b2940;
+  font-weight: bold;
+  padding: 0.85rem 2.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.12rem;
+  margin-top: 1.2rem;
+  transition: background 0.18s;
+}
+.btn-primary:hover {
+  background: #1b2940;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .quote-page {
+    padding: 1.1rem 0.6rem;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+
 
 /* Responsive: Hide sidebar on mobile */
 @media (max-width: 850px) {
