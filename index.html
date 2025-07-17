@@ -23,113 +23,120 @@
   <img src="../assets/logo.jpg" alt="Pioneer Logo" class="header-logo" />
 </header>
 
-<!-- Commercial Services Sidebar -->
-<aside class="sidebar-commercial">
-  <h2>Commercial Services</h2>
-  <ul>
-    <li><a href="#building-wash">Building Washing</a></li>
-    <li><a href="#parking">Parking Lot Cleaning</a></li>
-    <li><a href="#sidewalk">Sidewalk & Entryway Cleaning</a></li>
-    <li><a href="#fleet">Fleet Washing</a></li>
-    <li><a href="#landscape">Commercial Landscaping</a></li>
-    <li><a href="#property">HOA & Multi-Unit Care</a></li>
-    <li><a class="sidebar-quote" href="#request-quote">Request a Quote</a></li>
-  </ul>
-</aside>
+<!-- Begin content-wrapper flexbox -->
+<div class="content-wrapper">
 
-  
-<section class="hero">
-  <div class="container">
-    <h2>Professional Pressure Washing & Landscaping</h2>
-    <p>Driveways, Roofs, Gutters, Lawns & More</p>
-    <a href="estimate.html" class="btn-primary">Get a Free Estimate</a>
-  </div>
-</section>
+  <!-- Main site content -->
+  <div class="main-content">
 
-<section id="gallery" class="alt-section">
-  <div class="container">
-    <h2>Before & After Gallery</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="img/before-driveway1.jpg" alt="Before Driveway" />
-        <img src="img/after-driveway1.jpg" alt="After Driveway" />
-        <p><strong>Driveway Cleaning</strong></p>
+    <section class="hero">
+      <div class="container">
+        <h2>Professional Pressure Washing & Landscaping</h2>
+        <p>Driveways, Roofs, Gutters, Lawns & More</p>
+        <a href="estimate.html" class="btn-primary">Get a Free Estimate</a>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section id="services">
-  <div class="container">
-    <h2>Our Services</h2>
-    <div class="service-grid">
-      <div class="service-item">
-        <img src="img/driveway.jpg" />
-        <h3>Driveway Cleaning</h3>
+    <section id="gallery" class="alt-section">
+      <div class="container">
+        <h2>Before & After Gallery</h2>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <img src="img/before-driveway1.jpg" alt="Before Driveway" />
+            <img src="img/after-driveway1.jpg" alt="After Driveway" />
+            <p><strong>Driveway Cleaning</strong></p>
+          </div>
+        </div>
       </div>
-      <div class="service-item">
-        <img src="img/roof.jpg" />
-        <h3>Roof Cleaning</h3>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <h2>Our Services</h2>
+        <div class="service-grid">
+          <div class="service-item">
+            <img src="img/driveway.jpg" />
+            <h3>Driveway Cleaning</h3>
+          </div>
+          <div class="service-item">
+            <img src="img/roof.jpg" />
+            <h3>Roof Cleaning</h3>
+          </div>
+          <div class="service-item">
+            <img src="img/gutter.jpg" />
+            <h3>Gutter Cleaning</h3>
+          </div>
+          <div class="service-item">
+            <img src="img/lawn.jpg" />
+            <h3>Lawn Mowing</h3>
+          </div>
+        </div>
       </div>
-      <div class="service-item">
-        <img src="img/gutter.jpg" />
-        <h3>Gutter Cleaning</h3>
+    </section>
+
+    <section id="about" class="alt-section">
+      <div class="container">
+        <h2>About Us</h2>
+        <p>
+          Locally owned. Detail-driven. We make homes shine from the curb up
+          with pressure washing and professional landscaping.
+          <br><br>
+          For inquiries, Email us at sales@pioneerwashandlandscape.com.
+        </p>
       </div>
-      <div class="service-item">
-        <img src="img/lawn.jpg" />
-        <h3>Lawn Mowing</h3>
+    </section>
+
+    <section id="contact">
+      <div class="container contact">
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+          <input
+            id="name"
+            type="text"
+            placeholder="Your Name"
+            required
+          />
+          <input
+            id="email"
+            type="email"
+            placeholder="Your Email"
+            required
+          />
+          <textarea
+            id="message"
+            placeholder="Message"
+            rows="6"
+            required
+          ></textarea>
+          <button type="submit">Send</button>
+        </form>
+        <div id="formResponse" style="margin-top:1rem;"></div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section id="about" class="alt-section">
-  <div class="container">
-    <h2>About Us</h2>
-    <p>
-      Locally owned. Detail-driven. We make homes shine from the curb up
-      with pressure washing and professional landscaping.
+    <footer class="footer">
+      <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
+    </footer>
 
-      For inquiries, Email us at sales@pioneerwashandlandscape.com.
-    </p>
-  </div>
-</section>
+  </div><!-- End main-content -->
 
-<section id="contact">
-  <div class="container contact">
-    <h2>Contact Us</h2>
-    <form id="contact-form">
-      <input
-        id="name"
-        type="text"
-        placeholder="Your Name"
-        required
-      />
-      <input
-        id="email"
-        type="email"
-        placeholder="Your Email"
-        required
-      />
-      <textarea
-        id="message"
-        placeholder="Message"
-        rows="6"
-        required
-      ></textarea>
-      <button type="submit">Send</button>
-    </form>
-    <div id="formResponse" style="margin-top:1rem;"></div>
-  </div>
-</section>
+  <!-- Sidebar on the right -->
+  <aside class="sidebar-commercial">
+    <h2>Commercial Services</h2>
+    <ul>
+      <li><a href="#building-wash">Building Washing</a></li>
+      <li><a href="#parking">Parking Lot Cleaning</a></li>
+      <li><a href="#sidewalk">Sidewalk & Entryway Cleaning</a></li>
+      <li><a href="#fleet">Fleet Washing</a></li>
+      <li><a href="#landscape">Commercial Landscaping</a></li>
+      <li><a href="#property">HOA & Multi-Unit Care</a></li>
+      <li><a class="sidebar-quote" href="#request-quote">Request a Quote</a></li>
+    </ul>
+  </aside>
 
-<footer class="footer">
-  <p>&copy; 2025 Pioneer Pressure Washing and Landscaping</p>
-</footer>
+</div><!-- End content-wrapper -->
 
 <script src="scripts/contact.js" defer></script>
-
-
 
 </body>
 </html>
