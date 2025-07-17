@@ -291,7 +291,6 @@ body.admin td {
   height: 100px;
   object-fit: contain;
   display: block;
-  background: white;      /* Optional: matches header if logo is transparent */
   border-radius: 8px;     /* Optional: rounds the corners */
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);  /* Optional: subtle shadow */
 }
