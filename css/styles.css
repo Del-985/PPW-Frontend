@@ -269,6 +269,37 @@ body.admin td {
   font-weight: bold;
 }
 
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.header-title-nav {
+  flex: 1;
+}
+
+.header-logo {
+  max-height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 700px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .header-logo {
+    align-self: flex-end;
+    max-height: 60px;
+    margin-top: 0.5rem;
+  }
+}
+
+
 @keyframes fadeInTab {
   from { opacity: 0; }
   to   { opacity: 1; }
