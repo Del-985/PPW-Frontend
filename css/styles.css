@@ -286,18 +286,16 @@ body.admin td {
   object-fit: contain;
 }
 
-@media (max-width: 700px) {
-  .header-flex {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .header-logo {
-    align-self: flex-end;
-    max-height: 60px;
-    margin-top: 0.5rem;
-  }
+.header-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  background: white;      /* Optional: matches header if logo is transparent */
+  border-radius: 8px;     /* Optional: rounds the corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);  /* Optional: subtle shadow */
 }
+
 
 
 @keyframes fadeInTab {
