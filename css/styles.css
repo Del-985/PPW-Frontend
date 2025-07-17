@@ -295,23 +295,33 @@ body.admin td {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);  /* Optional: subtle shadow */
 }
 
+.content-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.main-content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .sidebar-commercial {
-  width: 220px;
+  width: 250px;
   background: #1b2940;
   color: #fff;
-  position: fixed;
-  top: 110px; /* adjust if your header height changes */
-  left: 0;
-  height: calc(100% - 110px);
+  border-radius: 18px;
   padding: 2rem 1rem 1rem 1.5rem;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.07);
-  border-radius: 0 18px 18px 0;
-  z-index: 20;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.07);
+  margin-top: 0;
 }
 
 .sidebar-commercial h2 {
-  font-size: 1.22rem;
-  margin-bottom: 1.2rem;
+  font-size: 1.15rem;
+  margin-bottom: 1.1rem;
   letter-spacing: 0.5px;
 }
 
@@ -349,11 +359,18 @@ body.admin td {
   color: #fff;
 }
 
-/* Push main content over so it's not under sidebar */
-.main-content {
-  margin-left: 240px;
-  padding: 2rem 1rem;
+/* Responsive: Stack sidebar below content on smaller screens */
+@media (max-width: 900px) {
+  .content-wrapper {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .sidebar-commercial {
+    width: 100%;
+    margin-top: 2rem;
+  }
 }
+
 
 /* Responsive: Hide sidebar on mobile */
 @media (max-width: 850px) {
