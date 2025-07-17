@@ -11,14 +11,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const responseBox = document.getElementById('loginResponse');
 
     try {
-     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',   // crucial!
-      body: JSON.stringify({ email, password })
-      });
+  const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',   // crucial!
+    body: JSON.stringify({ email, password })
+  });
 
-      });
+  // You can now handle res.ok, etc.
+  if (res.ok) {
+    window.location.replace('/dashboard.html');
+  } else {
+    // handle login error
+    const data = await res.json();
+    alert(data.error || 'Login failed.');
+  }
+} catch (err) {
+  console.error('Login fetch failed:', err);
+  alert('Could not connect to server.');
+}
 
       const data = await res.json();
       responseBox.textContent = data.message || data.error;
