@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formData = new FormData(form);
 
     try {
-      const res = await fetch('/api/quotes/commercial', {
+      const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/quotes/commercial', {
         method: 'POST',
         body: formData
       });
