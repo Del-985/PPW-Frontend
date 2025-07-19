@@ -1,4 +1,13 @@
 let selectedEntryIds = new Set();
+let editingExpenseId = null;
+
+// Cache all main DOM elements ONCE at the top for performance & clarity
+const expenseForm = document.getElementById('expense-form');
+const expensesTable = document.getElementById('expenses-table');
+const expenseModal = document.getElementById('expense-modal');
+const closeExpenseModal = document.getElementById('close-expense-modal');
+const expenseModalTitle = document.getElementById('expense-modal-title');
+const addExpenseBtn = document.getElementById('add-expense-btn');
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
