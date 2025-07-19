@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ email, password })
       });
 
@@ -22,28 +21,29 @@ document.addEventListener('DOMContentLoaded', function () {
       responseBox.textContent = data.message || data.error;
       responseBox.style.color = res.ok ? 'green' : 'red';
 
-      if (res.ok) {
-        // Allow cookie to set
-        setTimeout(async () => {
-          console.log('Cookies at redirect time:', document.cookie);
+      if (res.ok && data.token) {
+        // Save the token to localStorage
+        localStorage.setItem('authToken', data.token);
 
-          const checkRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
-            credentials: 'include'
-          });
-
-          if (checkRes.ok) {
-            const user = await checkRes.json();
-            console.log('User:', user);
-            if (user.is_admin) {
-              location.href = '/admin/admin.html';
-            } else {
-              location.href = '/business/dashboard.html';
-            }
-          } else {
-            console.error('Auth check failed:', await checkRes.text());
-            alert('Login successful but authentication check failed.');
+        // Now verify token & redirect appropriately
+        const checkRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
+          headers: {
+            'Authorization': `Bearer ${data.token}`
           }
-        }, 500);
+        });
+
+        if (checkRes.ok) {
+          const user = await checkRes.json();
+          console.log('User:', user);
+          if (user.is_admin) {
+            location.href = '/admin/admin.html';
+          } else {
+            location.href = '/business/dashboard.html';
+          }
+        } else {
+          console.error('Auth check failed:', await checkRes.text());
+          alert('Login successful but authentication check failed.');
+        }
       }
 
     } catch (err) {
