@@ -10,10 +10,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ business_name, email, password })
-    });
-
     });
 
     let data;
@@ -27,6 +24,9 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     if (res.ok) {
       responseBox.textContent = 'Registration successful. Redirecting to dashboard...';
       responseBox.style.color = 'green';
+      // Optionally, store the token if returned:
+      // if (data.token) localStorage.setItem('authToken', data.token);
+
       setTimeout(() => {
         window.location.href = '../business/dashboard.html'; // ✅ Ensure correct relative path
       }, 2000);
