@@ -2,8 +2,11 @@ const selectedEntryIds = new Set();
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     if (!res.ok) throw new Error('Unauthorized');
     const user = await res.json();
@@ -23,18 +26,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadAdminSchedule(); // 👈 New admin-specific calendar
     await loadInvoices();
 
-
   } catch (err) {
     console.error('Auth check failed:', err);
     location.replace('/portal.html');
   }
 });
 
+
 // Load Contacts
 async function loadContacts() {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/contacts', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     const data = await res.json();
     const tbody = document.querySelector('#contacts-table tbody');
@@ -56,8 +62,11 @@ async function loadContacts() {
 // Load Business Users
 async function loadBusinessUsers() {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/business-users', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     const data = await res.json();
     const tbody = document.querySelector('#business-users-table tbody');
@@ -77,24 +86,27 @@ async function loadBusinessUsers() {
 
 async function deleteContact(id) {
   if (!confirm('Are you sure you want to delete this contact?')) return;
+  const token = localStorage.getItem('authToken');
   await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/contact/${id}`, {
     method: 'DELETE',
-    credentials: 'include'
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
   loadContacts();
 }
 
 async function deleteBusinessUser(id) {
   if (!confirm('Are you sure you want to delete this user?')) return;
+  const token = localStorage.getItem('authToken');
   await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/business-user/${id}`, {
     method: 'DELETE',
-    credentials: 'include'
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
   loadBusinessUsers();
 }
-
-let calendarMonth = new Date().getMonth();
-let calendarYear = new Date().getFullYear();
 
 async function loadAdminSchedule() {
   const calendar = document.getElementById('calendar');
@@ -126,8 +138,11 @@ async function loadAdminSchedule() {
   const taskMap = {};
   let data = [];
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     data = await res.json();
     if (!Array.isArray(data)) throw new Error('Invalid schedule response');
@@ -230,22 +245,6 @@ async function loadAdminSchedule() {
 }
 
 
-  // Bulk action buttons
-  const bulkDiv = document.getElementById('bulkControls');
-  if (bulkDiv) {
-    bulkDiv.innerHTML = `
-      <button id="bulkApprove">Approve Selected</button>
-      <button id="bulkDeny">Deny Selected</button>
-      <span id="bulkStatus" style="margin-left:10px;"></span>
-    `;
-
-    document.getElementById('bulkApprove').onclick = () =>
-      sendBulkAction('Approved', Array.from(selectedEntryIds));
-    document.getElementById('bulkDeny').onclick = () =>
-      sendBulkAction('Denied', Array.from(selectedEntryIds));
-  }
-
-
 // Bulk approval/denial
 async function sendBulkAction(status) {
   if (selectedEntryIds.size === 0) {
@@ -254,10 +253,13 @@ async function sendBulkAction(status) {
   }
 
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/status/bulk', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({ ids: Array.from(selectedEntryIds), status })
     });
 
@@ -278,10 +280,13 @@ async function sendBulkAction(status) {
 // Individual approval/denial
 async function sendIndividualAction(taskId, status) {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/schedule/${taskId}/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({ status })
     });
 
@@ -314,12 +319,13 @@ document.getElementById('next-month').onclick = async () => {
   await loadAdminSchedule();
 };
 
-
-
 async function loadAuditLog() {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/audit-log', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     const data = await res.json();
     const tbody = document.querySelector('#audit-log-table tbody');
@@ -386,11 +392,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       try {
+        const token = localStorage.getItem('authToken');
         const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/invoice', {
           method: 'POST',
-          credentials: 'include',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(data)
         });
@@ -416,10 +423,14 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+
 async function loadInvoices() {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/invoices', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     if (!res.ok) throw new Error('Failed to fetch invoices');
     const invoices = await res.json();
@@ -451,9 +462,12 @@ async function loadInvoices() {
       btn.addEventListener('click', async function () {
         const id = this.dataset.id;
         if (confirm('Mark this invoice as paid?')) {
+          const token = localStorage.getItem('authToken');
           const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}/paid`, {
             method: 'PATCH',
-            credentials: 'include'
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
           });
           if (res.ok) {
             await loadInvoices(); // Refresh table
@@ -468,9 +482,12 @@ async function loadInvoices() {
       btn.addEventListener('click', async function () {
         const id = this.dataset.id;
         if (confirm('Delete this invoice? This cannot be undone.')) {
+          const token = localStorage.getItem('authToken');
           const res = await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/invoice/${id}`, {
             method: 'DELETE',
-            credentials: 'include'
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
           });
           if (res.ok) {
             await loadInvoices();
@@ -489,22 +506,16 @@ async function loadInvoices() {
 
 // === EXPENSES ===
 
-// Elements
-const expensesPanel = document.getElementById('expenses-panel');
-const expensesTable = document.getElementById('expenses-table');
-const addExpenseBtn = document.getElementById('add-expense-btn');
-const expenseModal = document.getElementById('expense-modal');
-const closeExpenseModal = document.getElementById('close-expense-modal');
-const expenseForm = document.getElementById('expense-form');
-const expenseModalTitle = document.getElementById('expense-modal-title');
-
-let editingExpenseId = null;
-
 async function loadExpenses(year = "") {
   try {
     let url = 'https://pioneer-pressure-washing.onrender.com/api/admin/expenses';
     if (year) url += `?year=${year}`;
-    const res = await fetch(url, { credentials: 'include' });
+    const token = localStorage.getItem('authToken');
+    const res = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     if (!res.ok) throw new Error('Failed to fetch expenses');
     const expenses = await res.json();
     const tbody = expensesTable.querySelector('tbody');
@@ -563,35 +574,6 @@ async function loadExpenses(year = "") {
   }
 }
 
-function showExpenseModal() {
-  expenseModal.style.display = 'block';
-}
-function hideExpenseModal() {
-  expenseModal.style.display = 'none';
-  expenseForm.reset();
-  editingExpenseId = null;
-  expenseModalTitle.textContent = 'Add Expense';
-}
-
-// Modal close
-if (closeExpenseModal) {
-  closeExpenseModal.onclick = hideExpenseModal;
-}
-window.onclick = function(event) {
-  if (event.target === expenseModal) hideExpenseModal();
-}
-
-// Add Expense button
-if (addExpenseBtn) {
-  addExpenseBtn.onclick = function() {
-    editingExpenseId = null;
-    expenseForm.reset();
-    expenseModalTitle.textContent = 'Add Expense';
-    showExpenseModal();
-  };
-}
-
-// Expense form submit
 if (expenseForm) {
   expenseForm.onsubmit = async function(e) {
     e.preventDefault();
@@ -608,10 +590,13 @@ if (expenseForm) {
       method = 'PATCH';
     }
     try {
+      const token = localStorage.getItem('authToken');
       const res = await fetch(url, {
         method,
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(data)
       });
       if (!res.ok) throw new Error('Failed to save expense');
@@ -623,14 +608,9 @@ if (expenseForm) {
   };
 }
 
-
-    // (Rest of your edit handlers below...)
-
 // === END EXPENSES ===
 
-
-
 function logout() {
-  document.cookie = "token=; path=/; max-age=0;";
+  localStorage.removeItem('authToken');
   location.href = '/';
 }
