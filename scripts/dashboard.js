@@ -1,9 +1,12 @@
-   let selectedEntryIds = new Set();
+let selectedEntryIds = new Set();
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/me', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     if (!res.ok) throw new Error('Unauthorized');
     const user = await res.json();
@@ -89,12 +92,15 @@ function setupScheduleForm() {
       const scheduled_time = form.scheduled_time.value;
       const notes = form.notes.value.trim();
       const responseBox = document.getElementById('scheduleResponse');
+      const token = localStorage.getItem('authToken');
 
       try {
         const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify({ service_type, scheduled_date, scheduled_time, notes })
         });
 
@@ -118,8 +124,11 @@ function loadContacts() {
   const contactsDiv = document.getElementById('contacts');
   if (!contactsDiv) return;
 
+  const token = localStorage.getItem('authToken');
   fetch('https://pioneer-pressure-washing.onrender.com/api/business/contacts', {
-    credentials: 'include'
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   })
     .then(res => res.json())
     .then(data => {
@@ -204,8 +213,11 @@ async function renderCalendar(force = false) {
   const taskMap = {};
   let data = [];
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     data = await res.json();
     if (!Array.isArray(data)) throw new Error('Invalid schedule response');
@@ -259,11 +271,14 @@ async function renderCalendar(force = false) {
 
       const notes = prompt('Any notes?') || '';
       const scheduledDate = `${year}-${monthPrefix}-${i.toString().padStart(2, '0')}`;
+      const token = localStorage.getItem('authToken');
 
       const createRes = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/schedule', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           service_type: serviceType,
           scheduled_time: scheduledTime,
@@ -320,10 +335,13 @@ async function renderCalendar(force = false) {
           const newNotes = prompt('Edit notes:', task.notes || '');
           if (newNotes === null) return;
 
+          const token = localStorage.getItem('authToken');
           const updateRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({
               service_type: newService,
               scheduled_time: newTime,
@@ -345,9 +363,12 @@ async function renderCalendar(force = false) {
           const confirmed = confirm('Delete this entry?');
           if (!confirmed) return;
 
+          const token = localStorage.getItem('authToken');
           const delRes = await fetch(`https://pioneer-pressure-washing.onrender.com/api/business/schedule/${task.id}`, {
             method: 'DELETE',
-            credentials: 'include'
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
           });
 
           if (delRes.ok) {
@@ -389,25 +410,6 @@ document.getElementById('next-month').onclick = () => {
 // On load
 document.addEventListener('DOMContentLoaded', renderCalendar);
 
-
-document.getElementById('prev-month').onclick = () => {
-  calendarMonth--;
-  if (calendarMonth < 0) {
-    calendarMonth = 11;
-    calendarYear--;
-  }
-  renderCalendar();
-};
-document.getElementById('next-month').onclick = () => {
-  calendarMonth++;
-  if (calendarMonth > 11) {
-    calendarMonth = 0;
-    calendarYear++;
-  }
-  renderCalendar();
-};
-
-
   // ⬛ Bulk action control buttons (once)
   const bulkControls = document.getElementById('bulkControls');
   if (bulkControls) {
@@ -420,7 +422,6 @@ document.getElementById('next-month').onclick = () => {
     document.getElementById('bulkApprove').onclick = () => sendBulkAction('Approved');
     document.getElementById('bulkDeny').onclick = () => sendBulkAction('Denied');
   }
-
 
 function renderCalendarFallback() {
   const calendar = document.getElementById('calendar');
@@ -460,10 +461,13 @@ async function sendBulkAction(status) {
   }
 
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/admin/schedule/status/bulk', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({ ids, status })
     });
 
@@ -487,8 +491,11 @@ async function sendBulkAction(status) {
 
 async function loadInvoices() {
   try {
+    const token = localStorage.getItem('authToken');
     const res = await fetch('https://pioneer-pressure-washing.onrender.com/api/business/me/invoices', {
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     if (!res.ok) throw new Error('Failed to fetch invoices');
 
@@ -541,11 +548,7 @@ async function loadInvoices() {
   }
 }
 
-async function logout() {
-  await fetch('https://pioneer-pressure-washing.onrender.com/api/auth/logout', {
-  method: 'POST',
-  credentials: 'include'
-   });
-   window.location.replace('/portal.html'); // or login page
-
+function logout() {
+  localStorage.removeItem('authToken');
+  window.location.replace('/portal.html');
 }
