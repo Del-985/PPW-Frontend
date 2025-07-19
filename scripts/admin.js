@@ -1,5 +1,19 @@
+// scripts/admin.js
+
+let calendarMonth = new Date().getMonth();
+let calendarYear = new Date().getFullYear();
+let editingExpenseId = null;
 const selectedEntryIds = new Set();
 
+// Cache form/table/modal elements ONCE at the top
+const expenseForm = document.getElementById('expense-form');
+const expensesTable = document.getElementById('expenses-table');
+const expenseModal = document.getElementById('expense-modal');
+const closeExpenseModal = document.getElementById('close-expense-modal');
+const expenseModalTitle = document.getElementById('expense-modal-title');
+const addExpenseBtn = document.getElementById('add-expense-btn');
+
+// Main startup logic
 document.addEventListener('DOMContentLoaded', async function () {
   try {
     const token = localStorage.getItem('authToken');
@@ -32,8 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 });
 
-
-// Load Contacts
+// --- Contacts ---
 async function loadContacts() {
   try {
     const token = localStorage.getItem('authToken');
@@ -59,7 +72,19 @@ async function loadContacts() {
   }
 }
 
-// Load Business Users
+async function deleteContact(id) {
+  if (!confirm('Are you sure you want to delete this contact?')) return;
+  const token = localStorage.getItem('authToken');
+  await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/contact/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  loadContacts();
+}
+
+// --- Business Users ---
 async function loadBusinessUsers() {
   try {
     const token = localStorage.getItem('authToken');
@@ -84,18 +109,6 @@ async function loadBusinessUsers() {
   }
 }
 
-async function deleteContact(id) {
-  if (!confirm('Are you sure you want to delete this contact?')) return;
-  const token = localStorage.getItem('authToken');
-  await fetch(`https://pioneer-pressure-washing.onrender.com/api/admin/contact/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-  loadContacts();
-}
-
 async function deleteBusinessUser(id) {
   if (!confirm('Are you sure you want to delete this user?')) return;
   const token = localStorage.getItem('authToken');
@@ -108,6 +121,7 @@ async function deleteBusinessUser(id) {
   loadBusinessUsers();
 }
 
+// --- Admin Schedule ---
 async function loadAdminSchedule() {
   const calendar = document.getElementById('calendar');
   const title = document.getElementById('calendar-title');
@@ -244,8 +258,7 @@ async function loadAdminSchedule() {
   if (typeof renderBulkControls === 'function') renderBulkControls();
 }
 
-
-// Bulk approval/denial
+// --- Bulk approval/denial ---
 async function sendBulkAction(status) {
   if (selectedEntryIds.size === 0) {
     alert('No entries selected.');
@@ -319,6 +332,7 @@ document.getElementById('next-month').onclick = async () => {
   await loadAdminSchedule();
 };
 
+// --- Audit Log ---
 async function loadAuditLog() {
   try {
     const token = localStorage.getItem('authToken');
@@ -347,8 +361,7 @@ async function loadAuditLog() {
   }
 }
 
-// scripts/admin.js
-
+// --- Tab switching ---
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.tab-panel');
@@ -363,11 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById(tab.dataset.tab).classList.add('active');
     });
   });
-
-  // TODO: Fetch and render data for each section as needed
-  // Example: fetchContacts(), fetchUsers(), fetchSchedule(), fetchAuditLog()
 });
 
+// --- Invoices ---
 document.addEventListener('DOMContentLoaded', function() {
   const invoiceForm = document.getElementById('invoice-form');
   if (invoiceForm) {
@@ -422,7 +433,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
-
 
 async function loadInvoices() {
   try {
@@ -504,8 +514,7 @@ async function loadInvoices() {
   }
 }
 
-// === EXPENSES ===
-
+// --- Expenses ---
 async function loadExpenses(year = "") {
   try {
     let url = 'https://pioneer-pressure-washing.onrender.com/api/admin/expenses';
@@ -518,6 +527,7 @@ async function loadExpenses(year = "") {
     });
     if (!res.ok) throw new Error('Failed to fetch expenses');
     const expenses = await res.json();
+    if (!expensesTable) return;
     const tbody = expensesTable.querySelector('tbody');
     tbody.innerHTML = '';
     expenses.forEach(exp => {
@@ -543,7 +553,6 @@ async function loadExpenses(year = "") {
       totalElem.style.marginLeft = '2em';
       totalElem.style.fontWeight = 'bold';
       // Insert after Add Expense button
-      const addExpenseBtn = document.getElementById('add-expense-btn');
       if (addExpenseBtn) addExpenseBtn.parentNode.insertBefore(totalElem, addExpenseBtn.nextSibling);
     }
     totalElem.textContent = `Total: $${total.toFixed(2)}`;
@@ -555,18 +564,21 @@ async function loadExpenses(year = "") {
         const expense = expenses.find(e => e.id == id);
         if (!expense) return;
         editingExpenseId = expense.id;
-        expenseModalTitle.textContent = 'Edit Expense';
-        expenseForm.elements['id'].value = expense.id;
-        expenseForm.elements['date'].value = expense.date;
-        expenseForm.elements['category'].value = expense.category;
-        expenseForm.elements['description'].value = expense.description || '';
-        expenseForm.elements['amount'].value = expense.amount;
+        if (expenseModalTitle) expenseModalTitle.textContent = 'Edit Expense';
+        if (expenseForm) {
+          expenseForm.elements['id'].value = expense.id;
+          expenseForm.elements['date'].value = expense.date;
+          expenseForm.elements['category'].value = expense.category;
+          expenseForm.elements['description'].value = expense.description || '';
+          expenseForm.elements['amount'].value = expense.amount;
+        }
         showExpenseModal();
       });
     });
 
   } catch (err) {
     console.error('Error loading expenses:', err);
+    if (!expensesTable) return;
     const tbody = expensesTable.querySelector('tbody');
     if (tbody) tbody.innerHTML = `<tr><td colspan="6">Failed to load expenses</td></tr>`;
     let totalElem = document.getElementById('expenses-total')
@@ -574,6 +586,35 @@ async function loadExpenses(year = "") {
   }
 }
 
+function showExpenseModal() {
+  if (expenseModal) expenseModal.style.display = 'block';
+}
+function hideExpenseModal() {
+  if (expenseModal) expenseModal.style.display = 'none';
+  if (expenseForm) expenseForm.reset();
+  editingExpenseId = null;
+  if (expenseModalTitle) expenseModalTitle.textContent = 'Add Expense';
+}
+
+// Modal close
+if (closeExpenseModal) {
+  closeExpenseModal.onclick = hideExpenseModal;
+}
+window.onclick = function(event) {
+  if (event.target === expenseModal) hideExpenseModal();
+}
+
+// Add Expense button
+if (addExpenseBtn) {
+  addExpenseBtn.onclick = function() {
+    editingExpenseId = null;
+    if (expenseForm) expenseForm.reset();
+    if (expenseModalTitle) expenseModalTitle.textContent = 'Add Expense';
+    showExpenseModal();
+  };
+}
+
+// Expense form submit
 if (expenseForm) {
   expenseForm.onsubmit = async function(e) {
     e.preventDefault();
@@ -608,7 +649,7 @@ if (expenseForm) {
   };
 }
 
-// === END EXPENSES ===
+// END EXPENSES
 
 function logout() {
   localStorage.removeItem('authToken');
