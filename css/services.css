@@ -1,0 +1,103 @@
+body {
+  background: #f6f8f7;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #2a2a2a;
+}
+
+.container {
+  width: 94%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 0;
+}
+
+main.container {
+  background: #fff;
+  border-radius: 1.4rem;
+  box-shadow: 0 2px 16px rgba(50, 92, 54, 0.10);
+  padding: 2.8rem 2rem 2.5rem 2rem;
+  margin-bottom: 2.5rem;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 2.1rem;
+  color: #2e6a3d;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.services-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: center;
+  margin-top: 2.3rem;
+}
+
+.service-card-link {
+  text-decoration: none;
+  color: inherit;
+  flex: 1 1 330px;
+  max-width: 350px;
+  min-width: 270px;
+  display: block;
+}
+
+.service-card {
+  background: #f9faf8;
+  border-radius: 1.3rem;
+  box-shadow: 0 2px 16px rgba(50, 92, 54, 0.07);
+  padding: 2.1rem 1.3rem 1.5rem 1.3rem;
+  min-height: 295px;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.17s, transform 0.11s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.service-card:hover {
+  box-shadow: 0 8px 32px rgba(44, 108, 54, 0.16);
+  transform: translateY(-3px) scale(1.012);
+  background: #fff;
+}
+
+.service-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+  color: #3ea456;
+  font-size: 1.35rem;
+  letter-spacing: 0.2px;
+}
+
+.service-card ul {
+  padding-left: 1.3rem;
+  margin-bottom: 1.4rem;
+  font-size: 1.08rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #47a860 75%, #2e6a3d 100%);
+  color: #fff;
+  border: none;
+  border-radius: 1.1rem;
+  padding: 0.66rem 1.36rem;
+  font-size: 1.09rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  box-shadow: 0 1px 7px rgba(44, 108, 54, 0.08);
+  display: inline-block;
+  transition: background 0.16s;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #2e6a3d 75%, #47a860 100%);
+}
+
+foote
