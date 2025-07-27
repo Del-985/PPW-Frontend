@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Our Services | Pioneer Pressure Washing</title>
+  <title>Request a Commercial Quote | Pioneer Pressure Washing</title>
   <link rel="stylesheet" href="../css/styles.css" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="../scripts/commercial-quote.js" defer></script>
 </head>
 <body>
 
@@ -13,89 +14,59 @@
   <div class="header-title-nav">
     <h1>Pioneer Pressure Washing and Landscaping</h1>
     <nav>
-      <a href="index.html#services" class="active">Services</a>
-      <a href="index.html#gallery">Gallery</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#contact">Contact</a>
-      <a href="estimate.html">Free Estimate</a>
-      <a href="portal.html">Business Login</a>
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#gallery">Gallery</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#contact">Contact</a>
+      <a href="../estimate.html">Free Estimate</a>
+      <a href="../portal.html">Business Login</a>
     </nav>
   </div>
   <img src="../assets/logo.jpg" alt="Pioneer Logo" class="header-logo" />
 </header>
 
-<main class="container">
-  <h2>Our Services</h2>
-  <div class="services-list">
+<main class="quote-page">
+  <section class="quote-intro">
+    <h2>Request a Commercial Quote</h2>
+    <p>
+      Looking for reliable pressure washing or landscaping for your business or property?
+      Complete the form below and our team will provide a fast, customized quote for your needs.
+      <strong>We serve offices, retail, warehouses, HOAs, and more!</strong>
+    </p>
+  </section>
 
-    <a href="commercial_quote.html" class="service-card-link" style="--anim-delay: 0.1s;" title="Get a commercial quote for Pressure Washing">
-      <section class="service-card">
-        <h3><span class="service-card-icon">💧</span> Pressure Washing</h3>
-        <ul>
-          <li>Driveways, sidewalks, and patios</li>
-          <li>Roofs and gutters</li>
-          <li>Houses and exterior walls</li>
-          <li>Decks and fences</li>
-        </ul>
-        <span class="btn-primary">Get a Free Estimate</span>
-      </section>
-    </a>
-
-    <a href="commercial_quote.html" class="service-card-link" style="--anim-delay: 0.22s;" title="Get a commercial quote for Landscaping">
-      <section class="service-card">
-        <h3><span class="service-card-icon">🌱</span> Landscaping</h3>
-        <ul>
-          <li>Lawn mowing and edging</li>
-          <li>Mulch and flower bed installation</li>
-          <li>Hedge and shrub trimming</li>
-          <li>Yard cleanups</li>
-        </ul>
-        <span class="btn-primary">Get a Free Estimate</span>
-      </section>
-    </a>
-
-    <a href="commercial_quote.html" class="service-card-link" style="--anim-delay: 0.34s;" title="Get a commercial quote for Soft Washing">
-      <section class="service-card">
-        <h3><span class="service-card-icon">🧽</span> Soft Washing</h3>
-        <ul>
-          <li>Roof and siding cleaning</li>
-          <li>Mold, algae, and mildew removal</li>
-          <li>Low-pressure safe application</li>
-          <li>Protects paint and finishes</li>
-        </ul>
-        <span class="btn-primary">Get a Free Estimate</span>
-      </section>
-    </a>
-
-    <a href="commercial_quote.html" class="service-card-link" style="--anim-delay: 0.46s;" title="Get a commercial quote for Gutter Cleaning">
-      <section class="service-card">
-        <h3><span class="service-card-icon">🪣</span> Gutter Cleaning</h3>
-        <ul>
-          <li>Gutter and downspout clearing</li>
-          <li>Debris removal</li>
-          <li>Prevent water damage</li>
-          <li>Seasonal packages available</li>
-        </ul>
-        <span class="btn-primary">Get a Free Estimate</span>
-      </section>
-    </a>
-
-    <a href="commercial_quote.html" class="service-card-link" style="--anim-delay: 0.58s;" title="Get a commercial quote for Lawn Care">
-      <section class="service-card">
-        <h3><span class="service-card-icon">🌾</span> Lawn Care</h3>
-        <ul>
-          <li>Weekly and biweekly mowing</li>
-          <li>Edging and trimming</li>
-          <li>Fertilization and weed control</li>
-          <li>Customized care plans</li>
-        </ul>
-        <span class="btn-primary">Get a Free Estimate</span>
-      </section>
-    </a>
-
-    <!-- Add more service types here as needed -->
-
-  </div>
+  <section class="quote-form-section">
+    <form id="commercial-quote-form" enctype="multipart/form-data">
+      <div class="form-row">
+        <input type="text" name="business" placeholder="Business/Organization Name" required>
+        <input type="text" name="contact" placeholder="Your Name" required>
+      </div>
+      <div class="form-row">
+        <input type="email" name="email" placeholder="Contact Email" required>
+        <input type="tel" name="phone" placeholder="Contact Phone" required>
+      </div>
+      <div class="form-row">
+        <input type="text" name="address" placeholder="Property Address" required>
+        <input type="text" name="city" placeholder="City" required>
+      </div>
+      <div class="form-row">
+        <input type="text" name="service-type" placeholder="Type of Business (e.g. Office, Retail, HOA, etc.)" required>
+        <input type="text" name="locations" placeholder="# of Properties / Locations">
+      </div>
+      <div class="form-row">
+        <textarea name="services" placeholder="Describe Services Needed (e.g. building washing, parking lot cleaning, landscape care)" rows="3" required></textarea>
+      </div>
+      <div class="form-row">
+        <input type="file" name="attachment" accept="image/*,application/pdf">
+        <input type="text" name="sqft" placeholder="Approx. Sq Ft / Area (if known)">
+      </div>
+      <div class="form-row">
+        <textarea name="notes" placeholder="Additional Notes / Requests (optional)" rows="2"></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Request Quote</button>
+      <div id="quoteResponse" style="margin-top:1rem;"></div>
+    </form>
+  </section>
 </main>
 
 <footer class="footer">
